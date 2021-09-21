@@ -1,51 +1,186 @@
-import React from 'react';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.global.css';
+import * as React from 'react';
+import { ChakraProvider, Box, IconButton, Button } from '@chakra-ui/react';
+import theme from './theme';
+import colorSchemeContext, { Color } from './libs/ColorSchemeContext';
+import NavBar from './Components/NavBar';
+// import NavBar from './NavBar';
+// import colorSchemeContext from 'src/libs/ColorSchemeContext';
+// import ThumbAndTagContainer from "./ThumbAndTagContainer";
+// import SettingsWrapper from "./Settings/SettingsWrapper";
+// import { Post, Tag } from "../types";
+// import { FaCog } from "react-icons/fa";
+// import NavBar from "./NavBar";
+// import ColorScheme from "../libs/ColorScheme";
+// import "focus-visible/dist/focus-visible";
+interface MainContainerProps {}
 
-const Hello = () => {
+// const colors = ["red", "yellow"];
+
+// const colorSchemeContext = React.createContext({
+//   lightMode: false,
+//   color: "red",
+// });
+export const MainContainer: React.FC<MainContainerProps> = () => {
+  let localStorageItem = localStorage.getItem('colorScheme');
+  if (!localStorageItem) localStorageItem = 'red';
+  console.log(theme.shadows.outline);
+  const [colorScheme, setColorScheme] =
+    React.useState<string>(localStorageItem);
+  function changeColorScheme(colorScheme: Color) {
+    setColorScheme(colorScheme);
+    console.log(colorScheme);
+    localStorage.setItem('colorScheme', colorScheme);
+  }
+
+  //   const [tags, setTags] = React.useState<Tag[]>([
+  //     {
+  //       id: 1,
+  //       name: "Tag1",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 2,
+  //       name: "Tag2",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       name: "Tag3",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 4,
+  //       name: "Tag4",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 5,
+  //       name: "Tag5",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 6,
+  //       name: "Tag6",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //     {
+  //       id: 7,
+  //       name: "Tag7",
+  //       folder: "A",
+  //       fromSite: [
+  //         { id: 0, text: "t" },
+  //         { id: 1, text: "t1" },
+  //         { id: 2, text: "t2" },
+  //       ],
+  //     },
+  //   ]);
+
+  //   const [posts, setPosts] = React.useState<Post[]>([
+  //     {
+  //       id: 0,
+  //       folder: "Folder",
+  //       name: "Post Name",
+
+  //       tagIds: [0, 1, 2],
+  //     },
+  //     {
+  //       id: 1,
+  //       folder: "Folder",
+  //       name: "Post Name",
+
+  //       tagIds: [1, 2, 3, 7],
+  //     },
+  //     {
+  //       id: 2,
+  //       folder: "Folder",
+  //       name: "Post Name",
+
+  //       tagIds: [1, 3, 2, 7],
+  //     },
+  //     {
+  //       id: 3,
+  //       folder: "Folder",
+  //       name: "Post Name",
+
+  //       tagIds: [7],
+  //     },
+  //     {
+  //       id: 4,
+  //       folder: "Folder",
+  //       name: "Post Name",
+
+  //       tagIds: [7],
+  //     },
+  //   ]);
+
+  // function saveTags(tagsToSave: Tag[]) {
+  //   setTags(tagsToSave);
+  //   // tags = tagsToSave;
+  // }
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
+    <ChakraProvider theme={theme}>
+      <colorSchemeContext.Provider
+        value={{
+          lightMode: true,
+          color: colorScheme,
+          setColor: changeColorScheme,
+        }}
+      >
+        <Box
+          textAlign="center"
+          fontSize="xl"
+          background="transparent"
+          h="100vh"
         >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
+          <NavBar />
+          {/* <NavBar
+          tags={tags}
+          saveTags={setTags.bind(this)}
+          colorScheme={colorScheme}
+          setColorScheme={changeColorScheme}
+        />
+        <ThumbAndTagContainer
+          posts={posts}
+          tags={tags}
+          colorScheme={colorScheme}
+          setColorScheme={changeColorScheme}
+        /> */}
+          {/* <IconButton icon={<FaCog />} aria-label="Settings" pos="fixed" /> */}
+          {/* <SettingsWrapper tags={tags} saveTags={setTags.bind(this)} /> */}
+        </Box>
+      </colorSchemeContext.Provider>
+    </ChakraProvider>
   );
 };
-
-export default function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/" component={Hello} />
-      </Switch>
-    </Router>
-  );
-}
+export default MainContainer;
+// export const useColorSchemeContext = () => useContext(colorSchemeContext);
