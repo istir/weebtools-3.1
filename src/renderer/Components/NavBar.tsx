@@ -13,56 +13,56 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import colorSchemeContext, { Color } from '../libs/ColorSchemeContext';
-// import { FaCog } from "react-icons/fa";
-// import { ColorModeSwitcher } from "../ColorModeSwitcher";
-// import IsLightMode from "../libs/IsLightMode";
-// import SettingsWrapper from "./Settings/SettingsWrapper";
-// import { Tag } from "../types";
+import { FaCog } from 'react-icons/fa';
+import { ColorModeSwitcher } from '../../ColorModeSwitcher';
+// import IsLightMode from '../libs/IsLightMode';
+// import SettingsWrapper from './Settings/SettingsWrapper';
+import { Tag } from '../types';
+import SettingsWrapper from './Settings/SettingsWrapper';
 
 interface NavBarProps {
-  // tags: Tag[];
-  // saveTags?: (tagsToSave: Tag[]) => void;
+  tags: Tag[];
+  saveTags?: (tagsToSave: Tag[]) => void;
   // colorScheme: string;
   // setColorScheme: (colorScheme: string) => void;
 }
 
-export const NavBar: React.FC<NavBarProps> = (
-  {
-    // tags,
-    // saveTags,
-    // colorScheme,
-    // setColorScheme,
-  }
-) => {
+export const NavBar: React.FC<NavBarProps> = ({
+  tags,
+  saveTags,
+  // colorScheme,
+  // setColorScheme,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // colorSchemeContext
-  const { lightMode, color, setColor } = useContext(colorSchemeContext);
+  const { IsLightMode, color } = useContext(colorSchemeContext);
   return (
+    // <>
+    //   <Button
+    //     colorScheme={color}
+    //     onClick={() => {
+    //       const colors: Color[] = [
+    //         'gray',
+    //         'red',
+    //         'orange',
+    //         'yellow',
+    //         'green',
+    //         'teal',
+    //         'blue',
+    //         'cyan',
+    //         'purple',
+    //         'pink',
+    //       ];
+    //       setColor(colors[Math.floor(Math.random() * colors.length)]);
+    //     }}
+    //   >
+    //     {color}
+    //   </Button>
     <>
-      <Button
-        colorScheme={color}
-        onClick={() => {
-          const colors: Color[] = [
-            'gray',
-            'red',
-            'orange',
-            'yellow',
-            'green',
-            'teal',
-            'blue',
-            'cyan',
-            'purple',
-            'pink',
-          ];
-          setColor(colors[Math.floor(Math.random() * colors.length)]);
-        }}
-      >
-        {color}
-      </Button>
-      {/* <Flex
+      <Flex
         pos="sticky"
         top="0"
-        bg={IsLightMode() ? `${colorScheme}.200` : `${colorScheme}.800`}
+        bg={IsLightMode() ? `${color}.200` : `${color}.800`}
         zIndex="20"
         justifyContent="flex-end"
         alignItems="center"
@@ -73,23 +73,18 @@ export const NavBar: React.FC<NavBarProps> = (
           bg="transparent"
           color={IsLightMode() ? `black` : `white`}
           _hover={{
-            background: `${
-              IsLightMode() ? `${colorScheme}.300` : `${colorScheme}.700`
-            }`,
+            background: `${IsLightMode() ? `${color}.300` : `${color}.700`}`,
           }}
-          colorScheme={colorScheme}
+          colorScheme={color}
           icon={<FaCog />}
           aria-label="Settings"
           onClick={onOpen}
         />
-
         <ColorModeSwitcher
           _hover={{
-            background: `${
-              IsLightMode() ? `${colorScheme}.300` : `${colorScheme}.700`
-            }`,
+            background: `${IsLightMode() ? `${color}.300` : `${color}.700`}`,
           }}
-          colorScheme={colorScheme}
+          colorScheme={color}
           justifySelf="flex-end"
         />
       </Flex>
@@ -101,15 +96,13 @@ export const NavBar: React.FC<NavBarProps> = (
             <SettingsWrapper
               tags={tags}
               saveTags={saveTags}
-              closeModal={onClose.bind(this)}
-              colorScheme={colorScheme}
-              setColorScheme={setColorScheme}
+              closeModal={onClose}
+              // colorScheme={color}
+              // setColorScheme={setColor}
             />
           </ModalBody>
-
-
         </ModalContent>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

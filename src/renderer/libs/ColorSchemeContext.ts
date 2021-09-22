@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import IsLightMode from './IsLightMode';
 
 export type Color =
   | 'gray'
@@ -12,7 +13,7 @@ export type Color =
   | 'purple'
   | 'pink';
 export type ColorScheme = {
-  lightMode: boolean;
+  IsLightMode: () => boolean;
   color: Color;
   setColor: (color: Color) => void;
 };
@@ -23,7 +24,7 @@ function setColor(color: Color): void {
 }
 
 const colorSchemeContext = React.createContext({
-  lightMode: false,
+  IsLightMode,
   color: currentColor,
   setColor: setColor.bind(this),
 });
