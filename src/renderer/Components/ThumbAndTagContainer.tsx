@@ -69,7 +69,7 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
         picked={picked}
         onDestroy={onThumbnailDeletion}
         onSelect={onThumbnailClick}
-        unCheckThumbnail={unCheckThumbnail}
+        // unCheckThumbnail={unCheckThumbnail}
         tags={props.tags}
       />
       <TagPicker picked={picked} tags={props.tags} updatePost={updatePost} />

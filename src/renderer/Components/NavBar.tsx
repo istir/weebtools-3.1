@@ -98,7 +98,7 @@ export const NavBar: React.FC<NavBarProps> = ({
             <SettingsWrapper
               tags={tags}
               saveTags={saveTags}
-              closeModal={onClose}
+              // closeModal={onClose}
               // colorScheme={color}
               // setColorScheme={setColor}
             />

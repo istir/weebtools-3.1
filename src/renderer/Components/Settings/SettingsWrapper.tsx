@@ -10,13 +10,13 @@ import { Tag } from '../../types';
 interface SettingsWrapperProps {
   tags: Tag[];
   saveTags?: (tagsToSave: Tag[]) => void;
-  closeModal?: () => void;
+  // closeModal: () => void;
 }
 
 export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
   tags,
   saveTags,
-  closeModal,
+  // closeModal,
 }) => {
   const { color, setColor } = useContext(useColorSchemeContext);
 
@@ -55,7 +55,7 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
         // isLightMode={useLightModeCheck()}
         tags={tags}
         saveTags={saveTags}
-        closeModal={closeModal}
+        // closeModal={closeModal}
         // color
         // scrollToElement={scrollToElement}
       />
