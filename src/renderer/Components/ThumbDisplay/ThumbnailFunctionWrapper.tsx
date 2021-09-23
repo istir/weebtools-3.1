@@ -1,6 +1,6 @@
-import React from "react";
-import IsLightMode from "../../libs/IsLightMode";
-import Thumbnail, { ThumbnailProps } from "./Thumbnail";
+import React from 'react';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import Thumbnail, { ThumbnailProps } from './Thumbnail';
 
 /* -------------------------------------------------------------------------- */
 /*                            HIGH ORDER COMPONENT                            */
@@ -9,7 +9,7 @@ import Thumbnail, { ThumbnailProps } from "./Thumbnail";
 /* --- used for being able to call a hook (IsLightMode) in class component -- */
 
 function ThumbnailFunctionWrapper(props: ThumbnailProps) {
-  return <Thumbnail {...props} lightMode={IsLightMode()} />;
+  return <Thumbnail {...props} lightMode={useLightModeCheck()} />;
 }
 
 export default ThumbnailFunctionWrapper;

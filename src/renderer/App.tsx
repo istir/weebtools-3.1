@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { ChakraProvider, Box } from '@chakra-ui/react';
 import theme from './theme';
-import colorSchemeContext, { Color } from './libs/ColorSchemeContext';
+import useColorSchemeContext, { Color } from './libs/useColorSchemeContext';
 import NavBar from './Components/NavBar';
 import { Post, Tag } from './types';
-import IsLightMode from './libs/IsLightMode';
 import ThumbAndTagContainer from './Components/ThumbAndTagContainer';
 // import NavBar from './NavBar';
 // import colorSchemeContext from 'src/libs/ColorSchemeContext';
@@ -15,7 +14,6 @@ import ThumbAndTagContainer from './Components/ThumbAndTagContainer';
 // import NavBar from "./NavBar";
 // import ColorScheme from "../libs/ColorScheme";
 // import "focus-visible/dist/focus-visible";
-interface MainContainerProps {}
 
 // const colors = ["red", "yellow"];
 
@@ -23,15 +21,15 @@ interface MainContainerProps {}
 //   lightMode: false,
 //   color: "red",
 // });
-export const MainContainer: React.FC<MainContainerProps> = () => {
+export const MainContainer: React.FC = () => {
   let localStorageItem = localStorage.getItem('colorScheme');
   if (!localStorageItem) localStorageItem = 'red';
-  console.log(theme.shadows.outline);
+  // console.log(theme.shadows.outline);
   const [colorScheme, setColorScheme] =
     React.useState<string>(localStorageItem);
   function changeColorScheme(colorScheme: Color) {
     setColorScheme(colorScheme);
-    console.log(colorScheme);
+    // console.log(colorScheme);
     localStorage.setItem('colorScheme', colorScheme);
   }
 
@@ -108,7 +106,7 @@ export const MainContainer: React.FC<MainContainerProps> = () => {
     },
   ]);
 
-  const [posts, setPosts] = React.useState<Post[]>([
+  const [posts] = React.useState<Post[]>([
     {
       id: 0,
       folder: 'Folder',
@@ -152,9 +150,9 @@ export const MainContainer: React.FC<MainContainerProps> = () => {
   // }
   return (
     <ChakraProvider theme={theme}>
-      <colorSchemeContext.Provider
+      <useColorSchemeContext.Provider
         value={{
-          IsLightMode,
+          // IsLightMode,
           color: colorScheme,
           setColor: changeColorScheme,
         }}
@@ -181,7 +179,7 @@ export const MainContainer: React.FC<MainContainerProps> = () => {
           {/* <IconButton icon={<FaCog />} aria-label="Settings" pos="fixed" /> */}
           {/* <SettingsWrapper tags={tags} saveTags={setTags.bind(this)} /> */}
         </Box>
-      </colorSchemeContext.Provider>
+      </useColorSchemeContext.Provider>
     </ChakraProvider>
   );
 };

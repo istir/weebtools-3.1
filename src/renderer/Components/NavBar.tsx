@@ -1,19 +1,17 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import {
-  Button,
   Flex,
   IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
-import colorSchemeContext, { Color } from '../libs/ColorSchemeContext';
 import { FaCog } from 'react-icons/fa';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import useColorSchemeContext from '../libs/useColorSchemeContext';
 import { ColorModeSwitcher } from '../../ColorModeSwitcher';
 // import IsLightMode from '../libs/IsLightMode';
 // import SettingsWrapper from './Settings/SettingsWrapper';
@@ -35,7 +33,7 @@ export const NavBar: React.FC<NavBarProps> = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // colorSchemeContext
-  const { IsLightMode, color } = useContext(colorSchemeContext);
+  const { color } = useContext(useColorSchemeContext);
   return (
     // <>
     //   <Button
@@ -62,7 +60,7 @@ export const NavBar: React.FC<NavBarProps> = ({
       <Flex
         pos="sticky"
         top="0"
-        bg={IsLightMode() ? `${color}.200` : `${color}.800`}
+        bg={useLightModeCheck() ? `${color}.200` : `${color}.800`}
         zIndex="20"
         justifyContent="flex-end"
         alignItems="center"
@@ -71,9 +69,11 @@ export const NavBar: React.FC<NavBarProps> = ({
       >
         <IconButton
           bg="transparent"
-          color={IsLightMode() ? `black` : `white`}
+          color={useLightModeCheck() ? `black` : `white`}
           _hover={{
-            background: `${IsLightMode() ? `${color}.300` : `${color}.700`}`,
+            background: `${
+              useLightModeCheck() ? `${color}.300` : `${color}.700`
+            }`,
           }}
           colorScheme={color}
           icon={<FaCog />}
@@ -82,7 +82,9 @@ export const NavBar: React.FC<NavBarProps> = ({
         />
         <ColorModeSwitcher
           _hover={{
-            background: `${IsLightMode() ? `${color}.300` : `${color}.700`}`,
+            background: `${
+              useLightModeCheck() ? `${color}.300` : `${color}.700`
+            }`,
           }}
           colorScheme={color}
           justifySelf="flex-end"

@@ -1,8 +1,9 @@
-import { Box, VStack } from "@chakra-ui/layout";
-import React from "react";
-import IsLightMode from "../../libs/IsLightMode";
-import { Tag } from "../../types";
-import TagComponent from "./TagComponent";
+import { Box, VStack } from '@chakra-ui/layout';
+import React from 'react';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+// import IsLightMode from '../../libs/IsLightMode';
+import { Tag } from '../../types';
+import TagComponent from './TagComponent';
 
 interface TagPickerFunctionWrapperProps {
   tags: Tag[];
@@ -17,12 +18,12 @@ export const TagPickerFunctionWrapper: React.FC<TagPickerFunctionWrapperProps> =
         <VStack
           borderRadius="md"
           alignItems="flex-start"
-          bg={IsLightMode() ? `${colorScheme}.200` : `${colorScheme}.800`}
+          bg={useLightModeCheck() ? `${colorScheme}.200` : `${colorScheme}.800`}
           borderStyle="solid"
           borderWidth="2px"
           minH="200px"
           borderColor={
-            IsLightMode() ? `${colorScheme}.400` : `${colorScheme}.600`
+            useLightModeCheck() ? `${colorScheme}.400` : `${colorScheme}.600`
           }
           padding="2"
         >

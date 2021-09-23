@@ -1,16 +1,17 @@
+/* eslint-disable react/no-children-prop */
 import {
   Input,
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
 } from '@chakra-ui/input';
-import { Box, Grid, Text } from '@chakra-ui/layout';
-import { Button, CloseButton, Flex, Icon, IconButton } from '@chakra-ui/react';
+import { Grid, Text } from '@chakra-ui/layout';
+import { Flex, IconButton } from '@chakra-ui/react';
 import React, { useContext } from 'react';
-import { fromSite, Tag } from '../../../types';
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
-import ColorScheme from '../../../libs/ColorScheme';
-import colorSchemeContext from 'renderer/libs/ColorSchemeContext';
+import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import { FromSite, Tag } from '../../../types';
 // import SettingsInput from "./SettingsInput";
 interface SettingsTagProps {
   tag: Tag;
@@ -24,7 +25,7 @@ interface SettingsTagProps {
     }: {
       name?: string;
       folder?: string;
-      fromSite?: fromSite;
+      fromSite?: FromSite;
     }
   ) => void;
 }
@@ -37,23 +38,14 @@ interface SettingsTagProps {
 // //TODO: everything that updates state should instead update parent prop
 
 export default function SettingsTags(props: SettingsTagProps) {
-  const { IsLightMode, color } = useContext(colorSchemeContext);
-
+  const { color } = useContext(useColorSchemeContext);
+  const lightMode = useLightModeCheck();
   const helperFromSite: { id: number; text: string }[] = [];
-  props.tag.fromSite?.map((val, index) => {
+  props.tag.fromSite?.map((val) => {
     return helperFromSite.push({ id: val.id, text: val.text });
   });
 
   function removeFromSite(fromSiteIndex: number) {
-    // this.setState((prevState) => {
-    //   const index = prevState.fromSite
-    //     .map((prevPost) => prevPost.id)
-    //     .indexOf(fromSiteIndex);
-    //   const helperArray = prevState.fromSite.slice(0);
-    //   helperArray.splice(index, 1);
-    //   // helperArray.inse
-    //   return { fromSite: helperArray };
-    // });
     const index = props.tag.fromSite
       .map((prevPost) => prevPost.id)
       .indexOf(fromSiteIndex);
@@ -66,11 +58,11 @@ export default function SettingsTags(props: SettingsTagProps) {
 
   return (
     <Grid
-      bg={`${color}.${IsLightMode() ? 100 : 900}`}
+      bg={`${color}.${lightMode ? 100 : 900}`}
       borderStyle="solid"
       borderWidth="2px"
       borderRadius="md"
-      borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+      borderColor={`${color}.${lightMode ? '200' : '700'}`}
       p="2"
       gridTemplateRows="min-content min-content min-content min-content"
     >
@@ -110,7 +102,7 @@ export default function SettingsTags(props: SettingsTagProps) {
           textAlign="center"
           justifyContent="center"
           fontWeight="semibold"
-          borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+          borderColor={`${color}.${lightMode ? '200' : '700'}`}
           borderWidth="2px"
           borderRightWidth="0"
           transitionDuration="normal"
@@ -120,7 +112,7 @@ export default function SettingsTags(props: SettingsTagProps) {
           type="text"
           placeholder="Name"
           value={props.tag.name ? props.tag.name : ''}
-          borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+          borderColor={`${color}.${lightMode ? '200' : '700'}`}
           _focus={{
             boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
           }}
@@ -141,7 +133,7 @@ export default function SettingsTags(props: SettingsTagProps) {
           textAlign="center"
           justifyContent="center"
           fontWeight="semibold"
-          borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+          borderColor={`${color}.${lightMode ? '200' : '700'}`}
           borderWidth="2px"
           borderRightStyle="none"
           transitionDuration="normal"
@@ -150,7 +142,7 @@ export default function SettingsTags(props: SettingsTagProps) {
           type="text"
           placeholder="Folder"
           value={props.tag.folder ? props.tag.folder : ''}
-          borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+          borderColor={`${color}.${lightMode ? '200' : '700'}`}
           borderWidth="2px"
           _focus={{
             boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
@@ -182,30 +174,18 @@ export default function SettingsTags(props: SettingsTagProps) {
                   _focus={{
                     boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
                   }}
-                  borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+                  borderColor={`${color}.${lightMode ? '200' : '700'}`}
                   borderWidth="2px"
                   borderStyle="solid"
                   borderRightWidth="0"
                   onChange={(e) => {
-                    // this.setState((prevState) => {
-                    //   const index = prevState.fromSite
-                    //     .map((prevFromSite) => prevFromSite.id)
-                    //     .indexOf(tag.id);
-                    //   console.log(index);
-                    //   const helperArray = prevState.fromSite.slice(0);
-                    //   helperArray.splice(index, 1, {
-                    //     id: tag.id,
-                    //     text: e.target.value,
-                    //   });
-                    //   return { fromSite: helperArray };
-                    // });
-                    const fromSite = props.tag.fromSite;
+                    const { fromSite } = props.tag;
                     const index = fromSite
                       .map((prevFromSite) => prevFromSite.id)
                       .indexOf(tag.id);
                     fromSite[index] = { id: tag.id, text: e.target.value };
                     props.updateTag(props.tag.id, {
-                      fromSite: fromSite,
+                      fromSite,
                     });
                   }}
                   pr="4.5rem"
@@ -226,12 +206,12 @@ export default function SettingsTags(props: SettingsTagProps) {
                       icon={<FaMinus />}
                       w="100%"
                       borderLeftRadius="0"
-                      borderColor={`${color}.${IsLightMode() ? '200' : '700'}`}
+                      borderColor={`${color}.${lightMode ? '200' : '700'}`}
                       borderWidth="2px"
                       borderStyle="solid"
                       borderLeftWidth="0"
                       onClick={() => {
-                        this.removeFromSite(tag.id);
+                        removeFromSite(tag.id);
                       }}
                     />
                   }

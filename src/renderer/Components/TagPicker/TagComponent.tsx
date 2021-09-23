@@ -17,10 +17,10 @@ export const TagComponent: React.FC<TagComponentProps> = ({
     <Checkbox
       colorScheme={colorScheme}
       minW="150px"
-      value={tag.id + ""}
+      value={`${tag.id  }`}
       isDisabled={!valid}
     >
-      {<Text fontSize="lg">{tag.name}</Text>}
+      <Text fontSize="lg">{tag.name}</Text>
     </Checkbox>
   );
 };

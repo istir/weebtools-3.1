@@ -1,11 +1,5 @@
-import {
-  Colors,
-  ThemeConfig,
-  ComponentStyleConfig,
-  extendTheme,
-  Theme,
-} from "@chakra-ui/react";
-import { mode, Styles } from "@chakra-ui/theme-tools";
+import { Colors, ThemeConfig, extendTheme } from '@chakra-ui/react';
+import { Styles } from '@chakra-ui/theme-tools';
 // import isLight from "./libs/isLightMode";
 // const customTheme:Theme {
 //   ...
@@ -18,16 +12,16 @@ import { mode, Styles } from "@chakra-ui/theme-tools";
 // }
 const colors: Colors = {
   gray: {
-    "50": "#F2F2F2",
-    "100": "#DBDBDB",
-    "200": "#C4C4C4",
-    "300": "#ADADAD",
-    "400": "#969696",
-    "500": "#808080",
-    "600": "#666666",
-    "700": "#4D4D4D",
-    "800": "#333333",
-    "900": "#1A1A1A",
+    '50': '#F2F2F2',
+    '100': '#DBDBDB',
+    '200': '#C4C4C4',
+    '300': '#ADADAD',
+    '400': '#969696',
+    '500': '#808080',
+    '600': '#666666',
+    '700': '#4D4D4D',
+    '800': '#333333',
+    '900': '#1A1A1A',
   },
 };
 
@@ -36,8 +30,8 @@ const shadows = {
 };
 
 const styles: Styles = {
-  global: (props) => ({
-    "html, body": {
+  global: () => ({
+    'html, body': {
       // color: isLight()?"gray.":"white",
       // lineHeight: "tall",
       // backgroundColor: mode("gray.50", "gray.900")(props),
@@ -49,28 +43,28 @@ const styles: Styles = {
   }),
 };
 const config: ThemeConfig = {
-  initialColorMode: "dark",
+  initialColorMode: 'dark',
   useSystemColorMode: false,
 };
 const components = {
   Button: {
-    baseStyle: ({ colorScheme: c }) => ({
+    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
       _focus: {
-        boxShadow: `0 0 0 3px var(--chakra-colors-${c}-200)`,
+        boxShadow: `0 0 0 3px var(--chakra-colors-${colorScheme}-200)`,
       },
     }),
   },
   Input: {
-    baseStyle: ({ colorScheme: c }) => ({
+    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
       _focus: {
-        boxShadow: `0 0 0 2px var(--chakra-colors-${c}-200)`,
+        boxShadow: `0 0 0 2px var(--chakra-colors-${colorScheme}-200)`,
       },
     }),
   },
   Select: {
-    baseStyle: ({ colorScheme: c }) => ({
+    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
       _focus: {
-        boxShadow: `0 0 0 20px var(--chakra-colors-${c}-200)`,
+        boxShadow: `0 0 0 20px var(--chakra-colors-${colorScheme}-200)`,
       },
     }),
   },

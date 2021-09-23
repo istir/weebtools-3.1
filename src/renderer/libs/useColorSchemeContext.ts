@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import IsLightMode from './IsLightMode';
+import React from 'react';
 
 export type Color =
   | 'gray'
@@ -13,7 +12,7 @@ export type Color =
   | 'purple'
   | 'pink';
 export type ColorScheme = {
-  IsLightMode: () => boolean;
+  // IsLightMode: () => boolean;
   color: Color;
   setColor: (color: Color) => void;
 };
@@ -23,11 +22,11 @@ function setColor(color: Color): void {
   currentColor = color;
 }
 
-const colorSchemeContext = React.createContext({
-  IsLightMode,
+const useColorSchemeContext = React.createContext({
+  // IsLightMode,
   color: currentColor,
   setColor: setColor.bind(this),
 });
 
-export default colorSchemeContext;
+export default useColorSchemeContext;
 // export const useColorSchemeContext = () => useContext(colorSchemeContext);

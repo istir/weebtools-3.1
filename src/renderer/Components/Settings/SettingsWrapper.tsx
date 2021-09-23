@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
 import { Box, Flex, Select } from '@chakra-ui/react';
+import useColorSchemeContext, {
+  Color,
+} from 'renderer/libs/useColorSchemeContext';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
 import SettingsTags from './Tags/SettingsTags';
 import { Tag } from '../../types';
-import colorSchemeContext, { Color } from 'renderer/libs/ColorSchemeContext';
+
 interface SettingsWrapperProps {
   tags: Tag[];
   saveTags?: (tagsToSave: Tag[]) => void;
@@ -14,7 +18,7 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
   saveTags,
   closeModal,
 }) => {
-  const { IsLightMode, color, setColor } = useContext(colorSchemeContext);
+  const { color, setColor } = useContext(useColorSchemeContext);
 
   return (
     <Box>
@@ -23,7 +27,7 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
           placeholder={color}
           color={color}
           value={color}
-          bg={IsLightMode() ? `${color}.200` : `${color}.800`}
+          bg={useLightModeCheck() ? `${color}.200` : `${color}.800`}
           _focus={{
             boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
           }}
@@ -48,7 +52,7 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
       </Flex>
 
       <SettingsTags
-        // isLightMode={IsLightMode()}
+        // isLightMode={useLightModeCheck()}
         tags={tags}
         saveTags={saveTags}
         closeModal={closeModal}

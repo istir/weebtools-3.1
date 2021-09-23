@@ -3,40 +3,37 @@ import { Grid } from '@chakra-ui/layout';
 
 import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import colorSchemeContext from 'renderer/libs/ColorSchemeContext';
-import { fromSite, Tag } from '../../../types';
+import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
+import { FromSite, Tag } from '../../../types';
 import SettingsTag from './SettingsTag';
 // import SettingsTag from './SettingsTag';
 
 interface SettingsTagsProps {
   tags: Tag[];
   saveTags?: (tagsToSave: Tag[]) => void;
-  closeModal?: () => void;
-}
-
-interface SettingsTagsState {
-  tags: Tag[];
+  // closeModal?: () => void;
 }
 
 export default function SettingsTags(props: SettingsTagsProps) {
   const initialTags = props.tags;
   let shouldCancel = false;
-  let isChanged = false;
+  // const isChanged = false;
 
-  const { IsLightMode, color } = useContext(colorSchemeContext);
+  const { color } = useContext(useColorSchemeContext);
 
   const [tags, setTags] = useState(props.tags);
 
   useEffect(() => {
     // componentDidMount
-    console.log('componentdidmount');
+    // console.log('componentdidmount');
     return () => {
       // componentWillUnmount
-      console.log('component will unmount');
+      // console.log('component will unmount');
       props.saveTags &&
         (shouldCancel ? props.saveTags(initialTags) : props.saveTags(tags));
     };
-  }, []);
+  }, [initialTags, props, shouldCancel, tags]);
 
   function addTag() {
     setTags((prevTags) => {
@@ -47,6 +44,7 @@ export default function SettingsTags(props: SettingsTagsProps) {
           prevTags[prevTags.length - 1].fromSite.length > 0)
       ) {
         const helperArray = prevTags.slice(0);
+        // console.log(prevTags[prevTags.length - 1]);
         helperArray.push({
           id: prevTags[prevTags.length - 1].id + 1,
           folder: '',
@@ -76,7 +74,7 @@ export default function SettingsTags(props: SettingsTagsProps) {
       name,
       folder,
       fromSite,
-    }: { name?: string; folder?: string; fromSite?: fromSite }
+    }: { name?: string; folder?: string; fromSite?: FromSite }
   ) {
     setTags((prevTags) => {
       const index = prevTags.map((prevPost) => prevPost.id).indexOf(id);
@@ -108,7 +106,7 @@ export default function SettingsTags(props: SettingsTagsProps) {
         mt="2"
         px="6"
         py="2"
-        bg={IsLightMode() ? `${color}.300` : `${color}.800`}
+        bg={useLightModeCheck() ? `${color}.300` : `${color}.800`}
         // ml="-6"
         pos="sticky"
         top="-5px"

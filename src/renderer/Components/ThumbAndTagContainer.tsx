@@ -1,96 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/layout';
 import ThumbnailContainer from './ThumbDisplay/ThumbnailContainer';
 import TagPicker from './TagPicker/TagPicker';
-import { Flex } from '@chakra-ui/layout';
 import { Post, Tag } from '../types';
+
 interface ThumbAndTagContainerProps {
   posts?: Post[];
   tags: Tag[];
-  colorScheme: string;
-  setColorScheme: (colorScheme: string) => void;
-}
-interface ThumbAndTagContainerState {
-  posts: Post[];
-  picked?: Post;
+  // colorScheme: string;
+  // setColorScheme: (colorScheme: string) => void;
 }
 
-export default class ThumbAndTagContainer extends React.Component<
-  ThumbAndTagContainerProps,
-  ThumbAndTagContainerState
-> {
-  constructor(props: ThumbAndTagContainerProps) {
-    super(props);
-    this.state = { posts: [], picked: undefined };
+export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [picked, setPicked] = useState<Post | undefined>(undefined);
+
+  React.useEffect(() => {
+    setPosts(props.posts ? props.posts : []);
+  }, [props.posts]);
+
+  function onThumbnailClick(post: Post) {
+    setPicked(post);
+  }
+  function unCheckThumbnail() {
+    setPicked(undefined);
   }
 
-  updatePost(post: Post) {
-    this.setState((prevState) => {
-      const index = prevState.posts
-        .map((prevPost) => prevPost.id)
-        .indexOf(post.id);
-      const helperArray = prevState.posts.slice(0);
+  function updatePost(post: Post) {
+    setPosts((prevPost) => {
+      const index = prevPost.map((prevIndex) => prevIndex.id).indexOf(post.id);
+      const helperArray = prevPost.slice(0);
       helperArray.splice(index, 1, post);
-      // helperArray.inse
-      return { posts: helperArray };
+      return helperArray;
     });
-    this.onThumbnailClick(post);
+    onThumbnailClick(post);
   }
 
-  componentDidMount() {
-    this.setState({ posts: this.props.posts ? this.props.posts : [] });
-  }
-
-  onThumbnailDeletion(post: Post) {
+  function onThumbnailDeletion(post: Post) {
     //! this COPIES the array to some helper and THEN removes it. Without it it's going to delete more than one element because it's state
-    if (this.state.picked?.id === post.id) {
-      this.setState({ picked: undefined });
+    if (picked?.id === post.id) {
+      // this.setState({ picked: undefined });
+      setPicked(undefined);
     }
-    this.setState((prevState) => {
-      const index = prevState.posts.indexOf(post);
-      const helperArray = prevState.posts.slice(0);
+    setPosts((prevPost) => {
+      const index = prevPost.indexOf(post);
+      const helperArray = prevPost.slice(0);
       helperArray.splice(index, 1);
-      return { posts: helperArray };
+      return helperArray;
     });
   }
 
-  onThumbnailClick(post: Post) {
-    this.setState({ picked: post });
-  }
-  unCheckThumbnail() {
-    this.setState({ picked: undefined });
-  }
-  render() {
-    return (
-      <Flex
-        className="ThumbnailContainer"
-        onClick={(e) => {
-          e.stopPropagation();
-          const { target } = e;
-
-          //* if clicked on .ThumbnailContainer unclick
-          if (target) {
-            (target as HTMLParagraphElement).classList.contains(
-              'ThumbnailContainer'
-            ) && this.unCheckThumbnail();
-          }
-        }}
-      >
-        <ThumbnailContainer
-          posts={this.state.posts}
-          picked={this.state.picked}
-          onDestroy={this.onThumbnailDeletion.bind(this)}
-          onSelect={this.onThumbnailClick.bind(this)}
-          unCheckThumbnail={this.unCheckThumbnail.bind(this)}
-          tags={this.props.tags}
-          colorScheme={this.props.colorScheme}
-        />
-        <TagPicker
-          picked={this.state.picked}
-          tags={this.props.tags}
-          updatePost={this.updatePost.bind(this)}
-          colorScheme={this.props.colorScheme}
-        />
-      </Flex>
-    );
-  }
+  return (
+    <Flex
+      className="ThumbnailContainer"
+      onClick={(e) => {
+        e.stopPropagation();
+        const { target } = e;
+        //* if clicked on .ThumbnailContainer unclick
+        if (target) {
+          (target as HTMLParagraphElement).classList.contains(
+            'ThumbnailContainer'
+          ) && unCheckThumbnail();
+        }
+      }}
+    >
+      <ThumbnailContainer
+        posts={posts}
+        picked={picked}
+        onDestroy={onThumbnailDeletion}
+        onSelect={onThumbnailClick}
+        unCheckThumbnail={unCheckThumbnail}
+        tags={props.tags}
+      />
+      <TagPicker picked={picked} tags={props.tags} updatePost={updatePost} />
+    </Flex>
+  );
 }
