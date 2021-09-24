@@ -9,8 +9,8 @@ import { Grid, Text } from '@chakra-ui/layout';
 import { Flex, IconButton } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
-import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import useColorSchemeContext from '../../../libs/useColorSchemeContext';
+import useLightModeCheck from '../../../libs/hooks/useLightModeCheck';
 import { FromSite, Tag } from '../../../types';
 // import SettingsInput from "./SettingsInput";
 interface SettingsTagProps {

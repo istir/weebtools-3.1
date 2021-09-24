@@ -3,8 +3,8 @@ import { Grid } from '@chakra-ui/layout';
 
 import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
-import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
+import useLightModeCheck from '../../../libs/hooks/useLightModeCheck';
+import useColorSchemeContext from '../../../libs/useColorSchemeContext';
 import { FromSite, Tag } from '../../../types';
 import SettingsTag from './SettingsTag';
 // import SettingsTag from './SettingsTag';

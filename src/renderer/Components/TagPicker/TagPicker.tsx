@@ -1,6 +1,6 @@
 import { CheckboxGroup } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
-import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
+import useColorSchemeContext from '../../libs/useColorSchemeContext';
 import { Post, Tag } from '../../types';
 import TagPickerFunctionWrapper from './TagPickerFunctionWrapper';
 

@@ -1,6 +1,6 @@
 import { Box, VStack } from '@chakra-ui/layout';
 import React from 'react';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
 // import IsLightMode from '../../libs/IsLightMode';
 import { Tag } from '../../types';
 import TagComponent from './TagComponent';

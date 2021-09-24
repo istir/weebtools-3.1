@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { Box, Flex, Select } from '@chakra-ui/react';
 import useColorSchemeContext, {
   Color,
-} from 'renderer/libs/useColorSchemeContext';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+} from '../../libs/useColorSchemeContext';
+import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
 import SettingsTags from './Tags/SettingsTags';
 import { Tag } from '../../types';
 

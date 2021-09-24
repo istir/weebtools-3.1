@@ -1,8 +1,8 @@
 import { Image } from '@chakra-ui/image';
 import { Box, Grid, Text } from '@chakra-ui/layout';
 import React, { useContext, useState } from 'react';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
-import useColorSchemeContext from 'renderer/libs/useColorSchemeContext';
+import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
+import useColorSchemeContext from '../../libs/useColorSchemeContext';
 import ThumbnailTagDisplay from './ThumbnailTagDisplay';
 import { Post, Tag } from '../../types';
 

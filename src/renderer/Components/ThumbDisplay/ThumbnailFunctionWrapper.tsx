@@ -1,5 +1,5 @@
 // import React from 'react';
-// import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+// import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
 // import Thumbnail, { ThumbnailProps } from './Thumbnail';
 
 // /* -------------------------------------------------------------------------- */
