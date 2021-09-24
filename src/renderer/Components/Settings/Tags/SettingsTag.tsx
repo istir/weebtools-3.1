@@ -112,12 +112,13 @@ export default function SettingsTags(props: SettingsTagProps) {
           type="text"
           placeholder="Name"
           value={props.tag.name ? props.tag.name : ''}
-          borderColor={`${color}.${lightMode ? '200' : '700'}`}
-          _focus={{
-            boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
-          }}
+          variant="focusable"
+          colorScheme={color}
+          bgShades={{ light: 'transparent', dark: 'transparent' }}
+          borderShades={{ light: '200', dark: '700' }}
           borderWidth="2px"
-          borderLeftWidth="0"
+          borderLeftWidth="3px"
+          borderLeftColor="transparent"
           onChange={(e) => {
             // this.setState({ name: e.target.value as string });
             props.updateTag(props.tag.id, { name: e.target.value });
@@ -142,12 +143,13 @@ export default function SettingsTags(props: SettingsTagProps) {
           type="text"
           placeholder="Folder"
           value={props.tag.folder ? props.tag.folder : ''}
-          borderColor={`${color}.${lightMode ? '200' : '700'}`}
+          variant="focusable"
+          colorScheme={color}
+          bgShades={{ light: 'transparent', dark: 'transparent' }}
+          borderShades={{ light: '200', dark: '700' }}
           borderWidth="2px"
-          _focus={{
-            boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
-          }}
-          borderLeftStyle="none"
+          borderLeftWidth="3px"
+          borderLeftColor="transparent"
           onChange={(e) => {
             // this.setState({ folder: e.target.value as string });
             props.updateTag(props.tag.id, {
@@ -164,20 +166,32 @@ export default function SettingsTags(props: SettingsTagProps) {
         <Flex flexDirection="column">
           {props.tag.fromSite?.map((tag) => (
             <Flex key={tag.id} mt="2" mx="2">
-              <InputGroup size="md">
+              <InputGroup
+                size="md"
+                transitionDuration="normal"
+                borderRadius="md"
+                border="2px solid #000"
+                _focusWithin={{
+                  border: '2px solid transparent',
+                  boxShadow: `inset 0 0 0 3px var(--chakra-colors-${color}-${
+                    lightMode ? '700' : '200'
+                  })`,
+                }}
+              >
                 <Input
                   type="text"
                   placeholder="Name"
-                  variant="filled"
+                  variant="noBorders"
                   value={tag.text}
+                  // variant="focusable"
+                  // colorScheme={color}
                   bg="whiteAlpha.400"
-                  _focus={{
-                    boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
-                  }}
-                  borderColor={`${color}.${lightMode ? '200' : '700'}`}
-                  borderWidth="2px"
-                  borderStyle="solid"
-                  borderRightWidth="0"
+                  // // bgShades={{ light: '300', dark: '500' }}
+                  // borderShades={{ light: '200', dark: '700' }}
+                  // borderWidth="2px"
+                  // borderLeftWidth="3px"
+                  // borderLeftColor="transparent"
+
                   onChange={(e) => {
                     const { fromSite } = props.tag;
                     const index = fromSite
@@ -195,7 +209,8 @@ export default function SettingsTags(props: SettingsTagProps) {
                   padding="0"
                   // width="4.5rem"
                   border="transparent"
-                  borderLeftWidth="0"
+                  // borderLeftWidth="0"
+                  overflow="hidden"
                   children={
                     <IconButton
                       aria-label="Remove tag"
@@ -205,11 +220,13 @@ export default function SettingsTags(props: SettingsTagProps) {
                       colorScheme={color}
                       icon={<FaMinus />}
                       w="100%"
-                      borderLeftRadius="0"
-                      borderColor={`${color}.${lightMode ? '200' : '700'}`}
-                      borderWidth="2px"
-                      borderStyle="solid"
-                      borderLeftWidth="0"
+                      borderRadius="0"
+                      border="0px solid transparent !important"
+                      // borderLeftRadius="0"
+                      // borderColor={`${color}.${lightMode ? '200' : '700'}`}
+                      // borderWidth="2px"
+                      // borderStyle="solid"
+                      // borderLeftWidth="0"
                       onClick={() => {
                         removeFromSite(tag.id);
                       }}

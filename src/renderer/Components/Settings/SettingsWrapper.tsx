@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, Flex, Select } from '@chakra-ui/react';
 import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
-import useColorSchemeContext, {
-  Color,
-} from '../../libs/useColorSchemeContext';
+import useColorSchemeContext, { Color } from '../../libs/useColorSchemeContext';
 import SettingsTags from './Tags/SettingsTags';
 import { Tag } from '../../types';
 
@@ -25,12 +23,11 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
       <Flex>
         <Select
           placeholder={color}
-          color={color}
           value={color}
-          bg={useLightModeCheck() ? `${color}.200` : `${color}.800`}
-          _focus={{
-            boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
-          }}
+          variant="focusable"
+          borderShades={{ light: '200', dark: '700' }}
+          colorScheme={color}
+          bgShades={{ light: '100', dark: '900' }}
           onChange={(e) => {
             if (e.target.value) {
               setColor(e.target.value as Color);

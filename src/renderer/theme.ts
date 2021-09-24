@@ -1,5 +1,5 @@
 import { Colors, ThemeConfig, extendTheme } from '@chakra-ui/react';
-import { Styles } from '@chakra-ui/theme-tools';
+import { Styles, mode } from '@chakra-ui/theme-tools';
 // import isLight from "./libs/isLightMode";
 // const customTheme:Theme {
 //   ...
@@ -34,7 +34,7 @@ const styles: Styles = {
     'html, body': {
       // color: isLight()?"gray.":"white",
       // lineHeight: "tall",
-      // backgroundColor: mode("gray.50", "gray.900")(props),
+      // backgroundColor: mode('gray.50', 'gray.900'),
     },
 
     // a: {
@@ -48,25 +48,109 @@ const config: ThemeConfig = {
 };
 const components = {
   Button: {
-    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
+    baseStyle: (props: { colorScheme: string }) => ({
       _focus: {
-        boxShadow: `0 0 0 3px var(--chakra-colors-${colorScheme}-200)`,
+        boxShadow: `0 0 0 3px var(--chakra-colors-${props.colorScheme}-${mode(
+          '700',
+          '200'
+        )(props)})`,
       },
     }),
   },
   Input: {
-    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
-      _focus: {
-        boxShadow: `0 0 0 2px var(--chakra-colors-${colorScheme}-200)`,
+    variants: {
+      focusable: (props: {
+        colorScheme: string;
+        borderShades?: { light: string; dark: string };
+        bgShades?: { light: string; dark: string };
+      }) => ({
+        field: {
+          backgroundColor:
+            props.bgShades?.light &&
+            props.bgShades?.dark &&
+            `var(--chakra-colors-${props.colorScheme}-${mode(
+              props.bgShades.light,
+              props.bgShades.dark
+            )(props)})`,
+          border:
+            props.borderShades?.light &&
+            props.borderShades?.dark &&
+            `2px solid var(--chakra-colors-${props.colorScheme}-${mode(
+              props.borderShades.light,
+              props.borderShades.dark
+            )(props)}) `,
+          _focus: {
+            border: `3px solid var(--chakra-colors-${props.colorScheme}-${mode(
+              '700',
+              '200'
+            )(props)})`,
+            // border: 'none',
+            // borderWidth: 'none',
+          },
+        },
+      }),
+      noBorders: {
+        border: '0px',
+        _focus: {
+          border: '0px',
+        },
+        _focusWithin: {
+          border: '0px',
+        },
       },
-    }),
+    },
   },
-  Select: {
-    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
-      _focus: {
-        boxShadow: `0 0 0 20px var(--chakra-colors-${colorScheme}-200)`,
+  InputGroup: {
+    // variants: {
+    //   focusable: (props: {
+    //     colorScheme: string;
+    //     borderShades?: { light: string; dark: string };
+    //     bgShades?: { light: string; dark: string };
+    //   }) => ({
+    //     field: {
+    //       backgroundColor: '#000',
+    //     },
+    //   }),
+    // },
+    variants: {
+      focusable: {
+        background: '#000',
       },
-    }),
+    },
+  },
+
+  Select: {
+    baseStyle: () => ({}),
+    variants: {
+      focusable: (props: {
+        colorScheme: string;
+        borderShades?: { light: string; dark: string };
+        bgShades?: { light: string; dark: string };
+      }) => ({
+        field: {
+          backgroundColor:
+            props.bgShades?.light &&
+            props.bgShades?.dark &&
+            `var(--chakra-colors-${props.colorScheme}-${mode(
+              props.bgShades.light,
+              props.bgShades.dark
+            )(props)})`,
+          boxShadow:
+            props.borderShades?.light &&
+            props.borderShades?.dark &&
+            `0 0 0 2px var(--chakra-colors-${props.colorScheme}-${mode(
+              props.borderShades.light,
+              props.borderShades.dark
+            )(props)}) `,
+          _focus: {
+            boxShadow: `0 0 0 3px var(--chakra-colors-${
+              props.colorScheme
+            }-${mode('700', '200')(props)})`,
+            border: 'none',
+          },
+        },
+      }),
+    },
   },
   // Input: {
   //   variants: {

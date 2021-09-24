@@ -36,8 +36,13 @@ export default function Thumbnail(props: ThumbnailProps) {
       cursor="pointer"
       userSelect="none"
       p="5"
-      transitionDuration="150ms"
+      tabIndex={0}
+      transitionDuration="normal"
       borderRadius="md"
+      _focus={{
+        transition: 'box-shadow 200ms',
+        boxShadow: `0 0 0 2px var(--chakra-colors-${color}-200)`,
+      }}
       bg={
         lightMode
           ? props.picked
