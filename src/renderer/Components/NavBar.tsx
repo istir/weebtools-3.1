@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FaCog } from 'react-icons/fa';
-import useLightModeCheck from 'renderer/libs/hooks/useLightModeCheck';
+import useLightModeCheck from '../libs/hooks/useLightModeCheck';
 import useColorSchemeContext from '../libs/useColorSchemeContext';
 import { ColorModeSwitcher } from '../../ColorModeSwitcher';
 // import IsLightMode from '../libs/IsLightMode';
