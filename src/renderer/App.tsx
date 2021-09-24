@@ -21,7 +21,7 @@ import ThumbAndTagContainer from './Components/ThumbAndTagContainer';
 //   lightMode: false,
 //   color: "red",
 // });
-export const MainContainer: React.FC = () => {
+export const App: React.FC = () => {
   let localStorageItem = localStorage.getItem('colorScheme');
   if (!localStorageItem) localStorageItem = 'red';
   // console.log(theme.shadows.outline);
@@ -183,5 +183,5 @@ export const MainContainer: React.FC = () => {
     </ChakraProvider>
   );
 };
-export default MainContainer;
+export default App;
 // export const useColorSchemeContext = () => useContext(colorSchemeContext);
