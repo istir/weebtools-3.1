@@ -40,10 +40,32 @@ interface SettingsTagProps {
 export default function SettingsTags(props: SettingsTagProps) {
   const { color } = useContext(useColorSchemeContext);
   const lightMode = useLightModeCheck();
-  const helperFromSite: { id: number; text: string }[] = [];
-  props.tag.fromSite?.map((val) => {
-    return helperFromSite.push({ id: val.id, text: val.text });
-  });
+
+  // const helperFromSite: { id: number; text: string }[] = [];
+  // props.tag.fromSite?.map((val) => {
+  //   // helperFromSite[val.id] = { id: val.id, text: val.text };
+  //   return helperFromSite.push({ id: val.id, text: val.text });
+  // });
+  const [tag, setTag] = React.useState<Tag>(props.tag);
+  // const [fromSite, setFromSite] = React.useState<
+  //   { id: number; text: string }[]
+  // >(props.tag.fromSite);
+
+  React.useEffect(() => {
+    // setFromSite(props.tag.fromSite);
+    setTag(props.tag);
+    // console.log(fromSite);
+    return () => {};
+  }, [props.tag]);
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     console.log(props.tag.id);
+  //     props.updateTag(props.tag.id, {
+  //       fromSite,
+  //     });
+  //   };
+  // }, []);
 
   function removeFromSite(fromSiteIndex: number) {
     const index = props.tag.fromSite
@@ -65,6 +87,16 @@ export default function SettingsTags(props: SettingsTagProps) {
       borderColor={`${color}.${lightMode ? '200' : '700'}`}
       p="2"
       gridTemplateRows="min-content min-content min-content min-content"
+      onBlur={() => {
+        // console.log(props.tag.id);
+        // props.tag.fromSite
+        props.updateTag(props.tag.id, {
+          // tag.fromSite,
+          folder: tag.folder,
+          name: tag.name,
+          fromSite: tag.fromSite,
+        });
+      }}
     >
       <Grid
         ml="40px"
@@ -111,17 +143,35 @@ export default function SettingsTags(props: SettingsTagProps) {
         <Input
           type="text"
           placeholder="Name"
-          value={props.tag.name ? props.tag.name : ''}
+          // value={props.tag.name ? props.tag.name : ''}
+          value={tag.name ? tag.name : ''}
           variant="focusable"
           colorScheme={color}
-          bgShades={{ light: 'transparent', dark: 'transparent' }}
-          borderShades={{ light: '200', dark: '700' }}
+          lightborder="200"
+          darkborder="700"
+          lightbg="transparent"
+          darkbg="transparent"
           borderWidth="2px"
           borderLeftWidth="3px"
           borderLeftColor="transparent"
+          // onBlur={(e) => {
+          //   // props.updateTag(props.tag.id, { name: e.target.value });
+          // }}
           onChange={(e) => {
             // this.setState({ name: e.target.value as string });
-            props.updateTag(props.tag.id, { name: e.target.value });
+            // setTag((prevTag) => {
+            //   const helperArray = prevTag;
+            //   helperArray[tag.id] = {
+            //     id: tag.id,
+            //     text: e.target.value,
+            //   };
+            //   return { ...prevTag, fromSite: helperArray };
+            // });
+            setTag((prevTag) => {
+              return { ...prevTag, name: e.target.value as string };
+            });
+            // props.updateTag(props.tag.id, { name: e.target.value });
+            // console.log(e.target.value);
           }}
         />
       </InputGroup>
@@ -142,18 +192,23 @@ export default function SettingsTags(props: SettingsTagProps) {
         <Input
           type="text"
           placeholder="Folder"
-          value={props.tag.folder ? props.tag.folder : ''}
+          value={tag.folder ? tag.folder : ''}
           variant="focusable"
           colorScheme={color}
-          bgShades={{ light: 'transparent', dark: 'transparent' }}
-          borderShades={{ light: '200', dark: '700' }}
+          lightborder="200"
+          darkborder="700"
+          lightbg="transparent"
+          darkbg="transparent"
           borderWidth="2px"
           borderLeftWidth="3px"
           borderLeftColor="transparent"
           onChange={(e) => {
             // this.setState({ folder: e.target.value as string });
-            props.updateTag(props.tag.id, {
-              folder: e.target.value,
+            // props.updateTag(props.tag.id, {
+            //   folder: e.target.value,
+            // });
+            setTag((prevTag) => {
+              return { ...prevTag, folder: e.target.value as string };
             });
           }}
         />
@@ -164,16 +219,23 @@ export default function SettingsTags(props: SettingsTagProps) {
           From Site
         </Text>
         <Flex flexDirection="column">
-          {props.tag.fromSite?.map((tag) => (
+          {tag.fromSite.map((tag) => (
             <Flex key={tag.id} mt="2" mx="2">
               <InputGroup
                 size="md"
                 transitionDuration="normal"
                 borderRadius="md"
-                border="2px solid #000"
+                // border="2px solid #"
+                overflow="hidden"
+                // border={`2px solid var(--chakra-colors-${color}-${
+                //   lightMode ? '200' : '700'
+                // })`}
+                boxShadow={`0 0 0 2px var(--chakra-colors-${color}-${
+                  lightMode ? '200' : '800'
+                })`}
                 _focusWithin={{
-                  border: '2px solid transparent',
-                  boxShadow: `inset 0 0 0 3px var(--chakra-colors-${color}-${
+                  // border: `2px solid transparent`,
+                  boxShadow: `0 0 0 3px var(--chakra-colors-${color}-${
                     lightMode ? '700' : '200'
                   })`,
                 }}
@@ -183,24 +245,39 @@ export default function SettingsTags(props: SettingsTagProps) {
                   placeholder="Name"
                   variant="noBorders"
                   value={tag.text}
-                  // variant="focusable"
-                  // colorScheme={color}
-                  bg="whiteAlpha.400"
-                  // // bgShades={{ light: '300', dark: '500' }}
-                  // borderShades={{ light: '200', dark: '700' }}
-                  // borderWidth="2px"
-                  // borderLeftWidth="3px"
-                  // borderLeftColor="transparent"
+                  // id={tag.id.toString()}
 
+                  bg="whiteAlpha.400"
+                  borderRadius="0"
+                  // onBlur={(e) => {
+                  //   console.log(props.tag.id);
+                  //   props.updateTag(props.tag.id, {
+                  //     fromSite,
+                  //   });
+                  // }}
                   onChange={(e) => {
-                    const { fromSite } = props.tag;
-                    const index = fromSite
-                      .map((prevFromSite) => prevFromSite.id)
-                      .indexOf(tag.id);
-                    fromSite[index] = { id: tag.id, text: e.target.value };
-                    props.updateTag(props.tag.id, {
-                      fromSite,
+                    // console.log(e.target.id);
+                    // const { fromSite } = props.tag;
+                    // // const index = fromSite
+                    // //   .map((prevFromSite) => prevFromSite.id)
+                    // //   .indexOf(tag.id);
+                    // // fromSite[index] = { id: tag.id, text: e.target.value };
+                    // // props.updateTag(props.tag.id, {
+                    // //   fromSite,
+                    // // });
+                    // fromSite[tag.id] = { id: tag.id, text: e.target.value };
+                    // props.updateTag(props.tag.id, {
+                    //   fromSite,
+                    // });
+                    setTag((prevTag) => {
+                      const helperArray = prevTag.fromSite.slice(0);
+                      helperArray[tag.id] = {
+                        id: tag.id,
+                        text: e.target.value,
+                      };
+                      return { ...prevTag, fromSite: helperArray };
                     });
+                    // console.log(tag.id, index);
                   }}
                   pr="4.5rem"
                 />
@@ -210,7 +287,11 @@ export default function SettingsTags(props: SettingsTagProps) {
                   // width="4.5rem"
                   border="transparent"
                   // borderLeftWidth="0"
-                  overflow="hidden"
+                  borderRadius="0"
+                  // overflow="hidden"
+                  bg={`var(--chakra-colors-${color}-${
+                    lightMode ? '700' : '200'
+                  })`}
                   children={
                     <IconButton
                       aria-label="Remove tag"
@@ -221,7 +302,9 @@ export default function SettingsTags(props: SettingsTagProps) {
                       icon={<FaMinus />}
                       w="100%"
                       borderRadius="0"
-                      border="0px solid transparent !important"
+                      // border={`2px solid var(--chakra-colors-${color}-${
+                      //   lightMode ? '700' : '200'
+                      // })`}
                       // borderLeftRadius="0"
                       // borderColor={`${color}.${lightMode ? '200' : '700'}`}
                       // borderWidth="2px"
@@ -246,6 +329,7 @@ export default function SettingsTags(props: SettingsTagProps) {
           icon={<FaPlus />}
           onClick={() => {
             // this.setState((prevState) => {
+            // prevTags[prevTags.length - 1].id + 1,
             const helperArray = props.tag.fromSite
               ? props.tag.fromSite.slice(0)
               : [];
@@ -254,7 +338,10 @@ export default function SettingsTags(props: SettingsTagProps) {
                 helperArray[helperArray.length - 1].text !== '') ||
               !helperArray[helperArray.length - 1]
             ) {
-              helperArray.push({ id: helperArray.length, text: '' });
+              helperArray.push({
+                id: helperArray[helperArray.length - 1].id + 1,
+                text: '',
+              });
               // return { fromSite: helperArray };
               props.updateTag(props.tag.id, {
                 fromSite: helperArray,

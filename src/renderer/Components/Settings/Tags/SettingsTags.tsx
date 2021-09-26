@@ -16,20 +16,23 @@ interface SettingsTagsProps {
 }
 
 export default function SettingsTags(props: SettingsTagsProps) {
-  const initialTags = props.tags;
   let shouldCancel = false;
   // const isChanged = false;
 
   const { color } = useContext(useColorSchemeContext);
+  const helperTags: Tag[] = [];
+  // eslint-disable-next-line array-callback-return
+  props.tags.map((val) => {
+    helperTags[val.id] = val;
+  });
 
-  const [tags, setTags] = useState(props.tags);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialTags = React.useMemo(() => helperTags, []);
+
+  const [tags, setTags] = useState(helperTags);
 
   useEffect(() => {
-    // componentDidMount
-    // console.log('componentdidmount');
     return () => {
-      // componentWillUnmount
-      // console.log('component will unmount');
       props.saveTags &&
         (shouldCancel ? props.saveTags(initialTags) : props.saveTags(tags));
     };
@@ -43,14 +46,20 @@ export default function SettingsTags(props: SettingsTagsProps) {
           prevTags[prevTags.length - 1].folder !== '' ||
           prevTags[prevTags.length - 1].fromSite.length > 0)
       ) {
+        // console.log(prevTags);
         const helperArray = prevTags.slice(0);
-        // console.log(prevTags[prevTags.length - 1]);
-        helperArray.push({
+        // helperArray.push({
+        //   id: prevTags[prevTags.length - 1].id + 1,
+        //   folder: '',
+        //   name: '',
+        //   fromSite: [],
+        // });
+        helperArray[prevTags[prevTags.length - 1].id + 1] = {
           id: prevTags[prevTags.length - 1].id + 1,
           folder: '',
           name: '',
           fromSite: [],
-        });
+        };
         // this.props.saveTags && this.props.saveTags(helperArray);
         return helperArray;
       }
@@ -77,18 +86,29 @@ export default function SettingsTags(props: SettingsTagsProps) {
     }: { name?: string; folder?: string; fromSite?: FromSite }
   ) {
     setTags((prevTags) => {
-      const index = prevTags.map((prevPost) => prevPost.id).indexOf(id);
-      if (index < 0) return prevTags;
+      // console.log(prevTags);
+      // console.log(prevTags[id]);
+      // const index = prevTags.map((prevPost) => prevPost.id).indexOf(id);
+      // if (index < 0) return prevTags;
       const helperArray = prevTags.slice(0);
-      const helperTag = helperArray[index];
-      helperArray[index] = {
+      // const helperTag = helperArray[index];
+      // helperArray[index] = {
+      //   id: helperTag.id,
+      //   name: name || helperTag.name,
+      //   folder: folder || helperTag.folder,
+      //   fromSite: fromSite || helperTag.fromSite,
+      // };
+      const helperTag = helperArray[id];
+      helperArray[id] = {
         id: helperTag.id,
         name: name || helperTag.name,
         folder: folder || helperTag.folder,
         fromSite: fromSite || helperTag.fromSite,
       };
-      // this.props.saveTags && this.props.saveTags(helperArray);
+      // const index = prevTags.map((prevPost) => prevPost.id).indexOf(id);
 
+      // this.props.saveTags && this.props.saveTags(helperArray);
+      // console.log(id, helperArray);
       return helperArray;
     });
   }
@@ -136,6 +156,7 @@ export default function SettingsTags(props: SettingsTagsProps) {
         <Button
           disabled={
             // true
+            // false
             JSON.stringify(initialTags) === JSON.stringify(tags)
           }
           onClick={() => {

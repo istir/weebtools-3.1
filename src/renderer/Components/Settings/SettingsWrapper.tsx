@@ -25,9 +25,13 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
           placeholder={color}
           value={color}
           variant="focusable"
-          borderShades={{ light: '200', dark: '700' }}
+          // borderShades={{ light: '200', dark: '700' }}
+          lightborder="200"
+          darkborder="700"
+          lightbg="100"
+          darkbg="900"
           colorScheme={color}
-          bgShades={{ light: '100', dark: '900' }}
+          // bgShades={{ light: '100', dark: '900' }}
           onChange={(e) => {
             if (e.target.value) {
               setColor(e.target.value as Color);
@@ -47,7 +51,6 @@ export const SettingsWrapper: React.FC<SettingsWrapperProps> = ({
         </Select>
         {/* <Box w="10" h="10" bg={`${color}.200`} /> */}
       </Flex>
-
       <SettingsTags
         // isLightMode={useLightModeCheck()}
         tags={tags}

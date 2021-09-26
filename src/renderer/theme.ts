@@ -61,23 +61,25 @@ const components = {
     variants: {
       focusable: (props: {
         colorScheme: string;
-        borderShades?: { light: string; dark: string };
-        bgShades?: { light: string; dark: string };
+        lightborder?: string;
+        darkborder?: string;
+        lightbg?: string;
+        darkbg?: string;
       }) => ({
         field: {
           backgroundColor:
-            props.bgShades?.light &&
-            props.bgShades?.dark &&
+            props.lightbg &&
+            props.darkbg &&
             `var(--chakra-colors-${props.colorScheme}-${mode(
-              props.bgShades.light,
-              props.bgShades.dark
+              props.lightbg,
+              props.darkbg
             )(props)})`,
           border:
-            props.borderShades?.light &&
-            props.borderShades?.dark &&
+            props.lightborder &&
+            props.darkborder &&
             `2px solid var(--chakra-colors-${props.colorScheme}-${mode(
-              props.borderShades.light,
-              props.borderShades.dark
+              props.lightborder,
+              props.darkborder
             )(props)}) `,
           _focus: {
             border: `3px solid var(--chakra-colors-${props.colorScheme}-${mode(
@@ -124,23 +126,27 @@ const components = {
     variants: {
       focusable: (props: {
         colorScheme: string;
-        borderShades?: { light: string; dark: string };
-        bgShades?: { light: string; dark: string };
+        lightborder?: string;
+        darkborder?: string;
+        lightbg?: string;
+        darkbg?: string;
+        // borderShades?: { light: string; dark: string };
+        // bgShades?: { light: string; dark: string };
       }) => ({
         field: {
           backgroundColor:
-            props.bgShades?.light &&
-            props.bgShades?.dark &&
+            props.lightbg &&
+            props.darkbg &&
             `var(--chakra-colors-${props.colorScheme}-${mode(
-              props.bgShades.light,
-              props.bgShades.dark
+              props.lightbg,
+              props.darkbg
             )(props)})`,
           boxShadow:
-            props.borderShades?.light &&
-            props.borderShades?.dark &&
+            props.lightborder &&
+            props.darkborder &&
             `0 0 0 2px var(--chakra-colors-${props.colorScheme}-${mode(
-              props.borderShades.light,
-              props.borderShades.dark
+              props.lightborder,
+              props.darkborder
             )(props)}) `,
           _focus: {
             boxShadow: `0 0 0 3px var(--chakra-colors-${
