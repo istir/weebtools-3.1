@@ -46,6 +46,7 @@ export default function SettingsTags(props: SettingsTagProps) {
   //   // helperFromSite[val.id] = { id: val.id, text: val.text };
   //   return helperFromSite.push({ id: val.id, text: val.text });
   // });
+  // TODO: use memo
   const [tag, setTag] = React.useState<Tag>(props.tag);
   // const [fromSite, setFromSite] = React.useState<
   //   { id: number; text: string }[]
@@ -126,7 +127,22 @@ export default function SettingsTags(props: SettingsTagProps) {
         />
       </Grid>
 
-      <InputGroup marginBottom="2">
+      <InputGroup
+        marginBottom="2"
+        transitionDuration="normal"
+        borderRadius="md"
+        // border="2px solid #"
+        overflow="hidden"
+        boxShadow={`0 0 0 2px var(--chakra-colors-${color}-${
+          lightMode ? '200' : '800'
+        })`}
+        _focusWithin={{
+          // border: `2px solid transparent`,
+          boxShadow: `0 0 0 3px var(--chakra-colors-${color}-${
+            lightMode ? '700' : '200'
+          })`,
+        }}
+      >
         <InputLeftAddon
           children="Name"
           bg="whiteAlpha.400"
@@ -134,9 +150,9 @@ export default function SettingsTags(props: SettingsTagProps) {
           textAlign="center"
           justifyContent="center"
           fontWeight="semibold"
-          borderColor={`${color}.${lightMode ? '200' : '700'}`}
-          borderWidth="2px"
-          borderRightWidth="0"
+          // borderColor={`${color}.${lightMode ? '200' : '700'}`}
+          borderWidth="0px"
+          // borderRightWidth="0"
           transitionDuration="normal"
           userSelect="none"
         />
@@ -145,14 +161,15 @@ export default function SettingsTags(props: SettingsTagProps) {
           placeholder="Name"
           // value={props.tag.name ? props.tag.name : ''}
           value={tag.name ? tag.name : ''}
-          variant="focusable"
+          variant="noBorders"
           colorScheme={color}
-          lightborder="200"
-          darkborder="700"
-          lightbg="transparent"
-          darkbg="transparent"
-          borderWidth="2px"
-          borderLeftWidth="3px"
+          bg="transparent"
+          // lightborder="200"
+          // darkborder="700"
+          // lightbg="transparent"
+          // darkbg="transparent"
+          // borderWidth="2px"
+          // borderLeftWidth="3px"
           borderLeftColor="transparent"
           // onBlur={(e) => {
           //   // props.updateTag(props.tag.id, { name: e.target.value });
@@ -176,7 +193,22 @@ export default function SettingsTags(props: SettingsTagProps) {
         />
       </InputGroup>
 
-      <InputGroup userSelect="none">
+      <InputGroup
+        userSelect="none"
+        transitionDuration="normal"
+        borderRadius="md"
+        // border="2px solid #"
+        overflow="hidden"
+        boxShadow={`0 0 0 2px var(--chakra-colors-${color}-${
+          lightMode ? '200' : '800'
+        })`}
+        _focusWithin={{
+          // border: `2px solid transparent`,
+          boxShadow: `0 0 0 3px var(--chakra-colors-${color}-${
+            lightMode ? '700' : '200'
+          })`,
+        }}
+      >
         <InputLeftAddon
           children="Folder"
           bg="whiteAlpha.400"
@@ -184,8 +216,8 @@ export default function SettingsTags(props: SettingsTagProps) {
           textAlign="center"
           justifyContent="center"
           fontWeight="semibold"
-          borderColor={`${color}.${lightMode ? '200' : '700'}`}
-          borderWidth="2px"
+          // borderColor={`${color}.${lightMode ? '200' : '700'}`}
+          borderWidth="0px"
           borderRightStyle="none"
           transitionDuration="normal"
         />
@@ -193,15 +225,9 @@ export default function SettingsTags(props: SettingsTagProps) {
           type="text"
           placeholder="Folder"
           value={tag.folder ? tag.folder : ''}
-          variant="focusable"
+          variant="noBorders"
           colorScheme={color}
-          lightborder="200"
-          darkborder="700"
-          lightbg="transparent"
-          darkbg="transparent"
-          borderWidth="2px"
-          borderLeftWidth="3px"
-          borderLeftColor="transparent"
+          bg="transparent"
           onChange={(e) => {
             // this.setState({ folder: e.target.value as string });
             // props.updateTag(props.tag.id, {
