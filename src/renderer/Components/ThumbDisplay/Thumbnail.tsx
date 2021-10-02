@@ -11,8 +11,8 @@ import { Post, Tag } from '../../types';
 export interface ThumbnailProps {
   post?: Post;
   onDestroy?: (post: Post) => void;
-  onSelect?: (post: Post) => void;
-  picked?: boolean;
+  onSelect?: (post: Post, ctrlKey: boolean, shiftKey: boolean) => void;
+  picked?: Post[];
   tags: Tag[];
 }
 
@@ -23,6 +23,11 @@ export default function Thumbnail(props: ThumbnailProps) {
   const lightMode = useLightModeCheck();
   const { color } = useContext(useColorSchemeContext);
 
+  const isPicked =
+    props.picked && props.post
+      ? props.picked.map((val) => val.id).indexOf(props.post?.id) >= 0
+      : false;
+  // console.log(isPicked);
   return (
     <Grid
       onContextMenu={(e) => {
@@ -30,7 +35,10 @@ export default function Thumbnail(props: ThumbnailProps) {
         e.preventDefault();
       }}
       onClick={(e) => {
-        props.onSelect && props.post && props.onSelect(props.post);
+        // console.log(e);
+        props.onSelect &&
+          props.post &&
+          props.onSelect(props.post, e.ctrlKey, e.shiftKey);
         e.preventDefault();
       }}
       cursor="pointer"
@@ -45,10 +53,10 @@ export default function Thumbnail(props: ThumbnailProps) {
       }}
       bg={
         lightMode
-          ? props.picked
+          ? isPicked
             ? `${color}.400`
             : `${color}.200`
-          : props.picked
+          : isPicked
           ? `${color}.600`
           : `${color}.800`
       }
@@ -58,9 +66,9 @@ export default function Thumbnail(props: ThumbnailProps) {
       _hover={{
         background: () => {
           if (lightMode) {
-            return props.picked ? `${color}.500` : `${color}.300`;
+            return isPicked ? `${color}.500` : `${color}.300`;
           }
-          return props.picked ? `${color}.500` : `${color}.700`;
+          return isPicked ? `${color}.500` : `${color}.700`;
         },
       }}
       gridTemplateRows="200px"

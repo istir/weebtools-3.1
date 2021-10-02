@@ -6,15 +6,29 @@ import TagPickerFunctionWrapper from './TagPickerFunctionWrapper';
 
 interface TagPickerProps {
   tags: Tag[];
-  picked?: Post;
-  updatePost?: (post: Post) => void;
+  picked?: Post[];
+  updatePost?: (posts: Post[] | Post, tagIds: number[]) => void;
 }
 export default function TagPicker(props: TagPickerProps) {
   const [checked, setChecked] = React.useState<string[]>([]);
   const { color } = useContext(useColorSchemeContext);
+  const workType = props.picked?.length !== 1 ? 'multiple' : 'single';
+
+  function convertNumberToStringArray(arr: number[]): string[] {
+    return arr.map(String);
+  }
+
   useEffect(() => {
-    props.picked?.tagIds &&
-      setChecked(props.picked.tagIds.map((val) => `${val}`));
+    if (!props.picked) return;
+    if (workType === 'single') {
+      setChecked(convertNumberToStringArray(props.picked[0].tagIds));
+    } else {
+      // TODO: somehow make it so that if every post contains the same tag then show it and let the user toggle it on every post
+      // props.picked.map(post=>)
+      // setChecked(convertNumberToStringArray());
+    }
+
+    // setChecked(props.picked.tagIds.map((val) => `${val}`));
   }, [props.picked]);
 
   return (
@@ -25,15 +39,16 @@ export default function TagPicker(props: TagPickerProps) {
           setChecked(e as string[]);
           const filteredTags: number[] = [];
           e.forEach((val) => filteredTags.push(parseInt(val as string, 10)));
+          if (!props.updatePost) return;
+          if (!props.picked) return;
+          if (workType === 'single') {
+            props.updatePost(props.picked[0], filteredTags);
+            return;
+          }
+          return;
           props.updatePost &&
             props.picked &&
-            props.updatePost({
-              id: props.picked.id,
-              name: props.picked.name,
-              folder: props.picked.folder,
-              image: props.picked.image,
-              tagIds: filteredTags,
-            });
+            props.updatePost(props.picked, filteredTags);
         }
       }}
     >

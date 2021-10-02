@@ -19,13 +19,23 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     setPosts(props.posts ? props.posts : []);
   }, [props.posts]);
 
-  function onThumbnailClick(post: Post, ctrlKey: boolean, shiftKey: boolean) {
+  function onThumbnailClick(post: Post, ctrlKey?: boolean, shiftKey?: boolean) {
     // console.log(ctrlKey);
     // console.log(post.id);
     if (ctrlKey) {
       setPicked((prevPicked) => {
         const helperArray = prevPicked.slice(0);
-        helperArray.push(post);
+        // const postsTemp = prevPicked.map((val, index) => {
+        //   return { id: val.id, index };
+        // });
+
+        if (helperArray.includes(post)) {
+          // console.log(helperArray);
+          helperArray.splice(helperArray.indexOf(post), 1);
+          // console.log(helperArray);
+        } else {
+          helperArray.push(post);
+        }
         // console.log(helperArray);
         return helperArray;
       });
@@ -76,14 +86,38 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     setPicked([]);
   }
 
-  function updatePost(post: Post) {
-    setPosts((prevPost) => {
-      const index = prevPost.map((prevIndex) => prevIndex.id).indexOf(post.id);
-      const helperArray = prevPost.slice(0);
-      helperArray.splice(index, 1, post);
+  function updatePostsArray(posts: Post[], tagIds: number[]) {
+    setPosts((prevPosts) => {
+      const idsToUpdate = posts.map((postVal) => postVal.id);
+      const helperArray = prevPosts.slice(0);
+      helperArray.forEach((post) => {
+        if (idsToUpdate.includes(post.id)) {
+          const postToUpdate = tagIds ? { ...post, tagIds } : post;
+          helperArray.splice(post.id, 1, postToUpdate) &&
+            onThumbnailClick(post, false, false);
+        }
+      });
       return helperArray;
     });
-    onThumbnailClick(post, false);
+  }
+
+  function updatePost(post: Post, tagIds: number[]) {
+    setPosts((prevPost) => {
+      const index = prevPost.map((prevIndex) => prevIndex.id).indexOf(post.id);
+
+      const helperArray = prevPost.slice(0);
+      helperArray.splice(index, 1, { ...post, tagIds });
+      return helperArray;
+    });
+    onThumbnailClick({ ...post, tagIds });
+  }
+
+  function updatePosts(posts: Post[] | Post, tagIds: number[]) {
+    if (Array.isArray(posts)) {
+      updatePostsArray(posts, tagIds);
+      return;
+    }
+    updatePost(posts, tagIds);
   }
 
   function onThumbnailDeletion(post: Post) {
@@ -135,7 +169,7 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
         // unCheckThumbnail={unCheckThumbnail}
         tags={props.tags}
       />
-      {/* <TagPicker picked={picked} tags={props.tags} updatePost={updatePost} /> */}
+      <TagPicker picked={picked} tags={props.tags} updatePost={updatePosts} />
     </Flex>
   );
 }

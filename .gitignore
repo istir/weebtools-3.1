@@ -30,3 +30,8 @@ npm-debug.log.*
 
 # environment variables if any needed
 .env
+
+*.png
+*.psd
+*.jpeg
+*.jpg

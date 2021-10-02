@@ -5,9 +5,9 @@ import Thumbnail from './Thumbnail';
 
 interface ThumbnailContainerProps {
   posts?: Post[];
-  picked?: Post;
+  picked?: Post[];
   onDestroy?: (post: Post) => void;
-  onSelect?: (post: Post) => void;
+  onSelect?: (post: Post, ctrlKey: boolean, shiftKey: boolean) => void;
   // unCheckThumbnail?: () => void;
   tags: Tag[];
 }
@@ -31,7 +31,7 @@ export default function ThumbnailContainer(props: ThumbnailContainerProps) {
             onSelect={props.onSelect}
             post={post}
             key={post.id}
-            picked={props.picked?.id === post.id}
+            picked={props.picked}
             tags={props.tags}
           />
         ))}
