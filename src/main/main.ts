@@ -16,6 +16,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import loadFiles from './api/loadFiles';
+import loadTags from './api/loadTags';
 
 export default class AppUpdater {
   constructor() {
@@ -30,8 +32,21 @@ let mainWindow: BrowserWindow | null = null;
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
+  // const files = await loadFiles();
+  // event.reply('ipc-example', files[0].fileName);
+
   event.reply('ipc-example', msgTemplate('pong'));
 });
+
+ipcMain.on('loadFiles', async (e) => {
+  await loadFiles().then((ful) => e.reply('loadFiles', ful));
+  // e.reply('loadFiles', files);
+});
+ipcMain.on('loadTags', async (e) => {
+  await loadTags().then((ful) => e.reply('loadTags', ful));
+  // e.reply('loadFiles', files);
+});
+// console.log(loadFiles());
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -81,6 +96,7 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
     },
   });
 

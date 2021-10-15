@@ -1,15 +1,19 @@
 import React from 'react';
 import { Grid } from '@chakra-ui/layout';
-import { Post, Tag } from '../../types';
+import { Files, fromSite, Tag } from '@prisma/client';
 import Thumbnail from './Thumbnail';
 
 interface ThumbnailContainerProps {
-  posts?: Post[];
-  picked?: Post[];
-  onDestroy?: (post: Post) => void;
-  onSelect?: (post: Post, ctrlKey: boolean, shiftKey: boolean) => void;
+  posts?: (Files & { tags: Tag[] })[];
+  picked?: (Files & { tags: Tag[] })[];
+  onDestroy?: (post: Files & { tags: Tag[] }) => void;
+  onSelect?: (
+    post: Files & { tags: Tag[] },
+    ctrlKey: boolean,
+    shiftKey: boolean
+  ) => void;
   // unCheckThumbnail?: () => void;
-  tags: Tag[];
+  tags: (Tag & { fromSite: fromSite[] })[];
 }
 
 export default function ThumbnailContainer(props: ThumbnailContainerProps) {

@@ -1,25 +1,28 @@
 import { Image } from '@chakra-ui/image';
 import { Box, Grid, Text } from '@chakra-ui/layout';
+import { Files, Tag, fromSite } from '@prisma/client';
 import React, { useContext, useState } from 'react';
 import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
 import useColorSchemeContext from '../../libs/useColorSchemeContext';
 import ThumbnailTagDisplay from './ThumbnailTagDisplay';
-import { Post, Tag } from '../../types';
 
 // import isLightMode from "../../libs/IsLightMode"
 
 export interface ThumbnailProps {
-  post?: Post;
-  onDestroy?: (post: Post) => void;
-  onSelect?: (post: Post, ctrlKey: boolean, shiftKey: boolean) => void;
-  picked?: Post[];
-  tags: Tag[];
+  post: Files & { tags: Tag[] };
+  onDestroy?: (post: Files & { tags: Tag[] }) => void;
+  onSelect?: (
+    post: Files & { tags: Tag[] },
+    ctrlKey: boolean,
+    shiftKey: boolean
+  ) => void;
+  picked?: (Files & { tags: Tag[] })[];
+  tags: (Tag & { fromSite: fromSite[] })[];
 }
 
 export default function Thumbnail(props: ThumbnailProps) {
   const [isMouseOver, setIsMouseOver] = useState(false);
   const hiddenTextRef = React.createRef<HTMLParagraphElement>();
-
   const lightMode = useLightModeCheck();
   const { color } = useContext(useColorSchemeContext);
 
@@ -97,7 +100,7 @@ export default function Thumbnail(props: ThumbnailProps) {
           zIndex="-1"
           ref={hiddenTextRef}
         >
-          {props.post?.name ? props.post.name : 'Post Name'}
+          {props.post?.fileName ? props.post.fileName : 'Post Name'}
         </Text>
         <Text
           fontSize="md"
@@ -121,12 +124,13 @@ export default function Thumbnail(props: ThumbnailProps) {
           // bg={lightMode ? `${color}.200` : `${color}.800`}
           bg="inherit"
         >
-          {props.post?.name ? props.post.name : 'Post Name'}
+          {props.post?.fileName ? props.post.fileName : 'Post Name'}
         </Text>
       </Box>
       <ThumbnailTagDisplay
         tags={props.tags}
-        tagsIdsCurrentPost={props.post?.tagIds}
+        tagsCurrentPost={props.post.tags}
+        // tagsIdsCurrentPost={props.post?.tagIds}
         color={lightMode ? 'blackAlpha.800' : 'whiteAlpha.800'}
       />
       <Text

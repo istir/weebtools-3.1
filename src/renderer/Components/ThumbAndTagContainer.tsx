@@ -2,26 +2,31 @@ import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
 import ThumbnailContainer from './ThumbDisplay/ThumbnailContainer';
 import TagPicker from './TagPicker/TagPicker';
-import { Post, Tag } from '../types';
+// import { Post, Tag } from '../types';
+import { Files, fromSite, Tag } from '.prisma/client';
 
 interface ThumbAndTagContainerProps {
-  posts?: Post[];
-  tags: Tag[];
+  posts?: (Files & { tags: Tag[] })[];
+  tags: (Tag & { fromSite: fromSite[] })[];
   // colorScheme: string;
   // setColorScheme: (colorScheme: string) => void;
 }
 
 export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [picked, setPicked] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<(Files & { tags: Tag[] })[]>([]);
+  const [picked, setPicked] = useState<(Files & { tags: Tag[] })[]>([]);
 
   React.useEffect(() => {
     setPosts(props.posts ? props.posts : []);
   }, [props.posts]);
 
-  function onThumbnailClick(post: Post, ctrlKey?: boolean, shiftKey?: boolean) {
+  function onThumbnailClick(
+    post: Files & { tags: Tag[] },
+    ctrlKey?: boolean,
+    shiftKey?: boolean
+  ) {
     // console.log(ctrlKey);
-    // console.log(post.id);
+    console.log(post.id);
     if (ctrlKey) {
       setPicked((prevPicked) => {
         const helperArray = prevPicked.slice(0);
@@ -86,13 +91,13 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     setPicked([]);
   }
 
-  function updatePostsArray(posts: Post[], tagIds: number[]) {
+  function updatePostsArray(posts: (Files & { tags: Tag[] })[], tags: Tag[]) {
     setPosts((prevPosts) => {
       const idsToUpdate = posts.map((postVal) => postVal.id);
       const helperArray = prevPosts.slice(0);
       helperArray.forEach((post) => {
         if (idsToUpdate.includes(post.id)) {
-          const postToUpdate = tagIds ? { ...post, tagIds } : post;
+          const postToUpdate = tags ? { ...post, tags } : post;
           helperArray.splice(post.id, 1, postToUpdate) &&
             onThumbnailClick(post, false, false);
         }
@@ -101,26 +106,31 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     });
   }
 
-  function updatePost(post: Post, tagIds: number[]) {
+  function updatePost(post: Files & { tags: Tag[] }, tags: Tag[]) {
     setPosts((prevPost) => {
       const index = prevPost.map((prevIndex) => prevIndex.id).indexOf(post.id);
-
       const helperArray = prevPost.slice(0);
-      helperArray.splice(index, 1, { ...post, tagIds });
+      // const allTags =props.tags.map(val=>val.id)
+      helperArray.splice(index, 1, { ...post, tags });
       return helperArray;
     });
-    onThumbnailClick({ ...post, tagIds });
+    // onThumbnailClick({ ...post });
+    // onThumbnailClick(post);
   }
 
-  function updatePosts(posts: Post[] | Post, tagIds: number[]) {
+  function updatePosts(
+    posts: (Files & { tags: Tag[] })[] | (Files & { tags: Tag[] }),
+    tags: Tag[]
+  ) {
+    console.log('update');
     if (Array.isArray(posts)) {
-      updatePostsArray(posts, tagIds);
+      updatePostsArray(posts, tags);
       return;
     }
-    updatePost(posts, tagIds);
+    updatePost(posts, tags);
   }
 
-  function onThumbnailDeletion(post: Post) {
+  function onThumbnailDeletion(post: Files & { tags: Tag[] }) {
     //! this COPIES the array to some helper and THEN removes it. Without it it's going to delete more than one element because it's state
     // picked?.forEach(val=>{
     //   if(val.id===post.id) ;
