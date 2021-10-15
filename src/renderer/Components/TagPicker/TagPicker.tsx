@@ -1,13 +1,12 @@
 import { CheckboxGroup } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
 import useColorSchemeContext from '../../libs/useColorSchemeContext';
-import { Post, Tag } from '../../types';
 import TagPickerFunctionWrapper from './TagPickerFunctionWrapper';
 
 interface TagPickerProps {
   tags: Tag[];
-  picked?: Post[];
-  updatePost?: (posts: Post[] | Post, tagIds: number[]) => void;
+  picked?:  (Files & { tags: Tag[] })[];
+  updatePost?: (posts:  (Files & { tags: Tag[] })[] |  (Files & { tags: Tag[] }), tagIds: number[]) => void;
 }
 export default function TagPicker(props: TagPickerProps) {
   const [checked, setChecked] = React.useState<string[]>([]);
@@ -46,9 +45,9 @@ export default function TagPicker(props: TagPickerProps) {
             return;
           }
           return;
-          props.updatePost &&
-            props.picked &&
-            props.updatePost(props.picked, filteredTags);
+          // props.updatePost &&
+          //   props.picked &&
+          //   props.updatePost(props.picked, filteredTags);
         }
       }}
     >

@@ -1,0 +1,31 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Files {
+  id        Int    @id @default(autoincrement())
+  fileName  String @unique
+  folder    String
+  url       String
+  Timestamp BigInt
+  tags       Tag[]
+}
+
+model Tag {
+  id       Int        @id @default(autoincrement())
+  name     String
+  folder   String
+  fromSite fromSite[]
+  Files    Files[]
+}
+
+model fromSite {
+  id     Int    @id @default(autoincrement())
+  name   String
+  tagIds Int
+  Tag    Tag    @relation(fields: [tagIds], references: [id])
+}
+generator client {
+  provider = "prisma-client-js"
+}

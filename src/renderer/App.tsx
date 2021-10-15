@@ -166,6 +166,7 @@ export const App: React.FC = () => {
     useLoadFiles(setPosts, 10);
     useLoadTags(setTags);
   }, []);
+  console.log(posts);
   return (
     <ChakraProvider theme={theme}>
       <useColorSchemeContext.Provider

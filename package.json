@@ -14,7 +14,10 @@
     "start": "node -r @babel/register ./.erb/scripts/check-port-in-use.js && yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/babel-register ./src/main/main.ts",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
-    "test": "jest"
+    "test": "jest",
+    "sync-db": "npx prisma db push --preview-feature",
+    "open-client": "npx prisma studio",
+    "generate-client": "npx prisma generate"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -230,6 +233,7 @@
     "mini-css-extract-plugin": "^1.6.0",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.2.1",
+    "prisma": "^3.2.1",
     "react-refresh": "^0.10.0",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.0",
@@ -250,6 +254,7 @@
     "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@prisma/client": "^3.2.1",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.3.5",
     "electron-updater": "^4.3.8",
