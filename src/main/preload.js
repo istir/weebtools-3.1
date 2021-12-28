@@ -1,6 +1,12 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-const valid = ['ipc-example', 'loadFiles', 'loadTags'];
+const valid = [
+  'ipc-example',
+  'loadFiles',
+  'loadTags',
+  'loadImage',
+  'getSetting',
+];
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     async loadFiles() {
@@ -8,6 +14,15 @@ contextBridge.exposeInMainWorld('electron', {
     },
     async loadTags() {
       return ipcRenderer.send('loadTags');
+    },
+    async setTags(tags) {
+      return ipcRenderer.send('setTags', tags);
+    },
+    async getSetting(key) {
+      return ipcRenderer.send('getSetting', key);
+    },
+    async loadImage() {
+      return ipcRenderer.send('loadImage');
     },
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');

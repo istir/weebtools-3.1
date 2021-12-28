@@ -6,6 +6,6 @@ export default function useLoadFiles(setPosts, howMany: number) {
   window.electron.ipcRenderer.once('loadFiles', (arg) => {
     // eslint-disable-next-line no-console
     setPosts(arg);
-    console.log(arg);
+    // console.log(arg);
   });
 }

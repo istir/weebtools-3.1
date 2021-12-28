@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { Box, Flex, Select } from '@chakra-ui/react';
 // import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
+import { Tag } from '@prisma/client';
 import useColorSchemeContext, { Color } from '../../libs/useColorSchemeContext';
 import SettingsTags from './Tags/SettingsTags';
-import { Tag } from '../../types';
+// import { Tag } from '../../types';
 
 interface SettingsWrapperProps {
   tags: Tag[];

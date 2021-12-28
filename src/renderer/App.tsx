@@ -8,6 +8,8 @@ import useIpcRenderer from './libs/hooks/useIpcRenderer';
 import useLoadFiles from './libs/hooks/useLoadFiles';
 import { Files, fromSite, Tag } from '.prisma/client';
 import useLoadTags from './libs/hooks/useLoadTags';
+import useGetSetting from './libs/hooks/useGetSetting';
+import useSettingsContext, { ValidSettings } from './libs/useSettingsContext';
 // import NavBar from './NavBar';
 // import colorSchemeContext from 'src/libs/ColorSchemeContext';
 // import ThumbAndTagContainer from "./ThumbAndTagContainer";
@@ -158,6 +160,25 @@ export const App: React.FC = () => {
   const [tags, setTags] = React.useState<(Tag & { fromSite: fromSite[] })[]>(
     []
   );
+  const [settings, setSettings] = React.useState<ValidSettings>({
+    mainPath: '',
+  });
+
+  function hasKey<O>(obj: O, key: PropertyKey): key is keyof O {
+    return key in obj;
+  }
+
+  const setContextSettings = (key: string, value: string) => {
+    console.log(key);
+    setSettings((prevSettings) => {
+      if (hasKey(settings, key)) {
+        settings[key] = value;
+      }
+      // const sett = prevSettings
+      // if (Object.keys(prevSettings).includes(key)) prevSettings[key] = value;
+    });
+  };
+
   // function saveTags(tagsToSave: Tag[]) {
   //   setTags(tagsToSave);
   //   // tags = tagsToSave;
@@ -165,40 +186,46 @@ export const App: React.FC = () => {
   React.useEffect(() => {
     useLoadFiles(setPosts, 10);
     useLoadTags(setTags);
+    useGetSetting('mainPath', setContextSettings);
   }, []);
+  console.log(settings);
   console.log(posts);
   return (
     <ChakraProvider theme={theme}>
-      <useColorSchemeContext.Provider
-        value={{
-          // IsLightMode,
-          color: colorScheme,
-          setColor: changeColorScheme,
-        }}
+      <useSettingsContext.Provider
+        value={{ defaultSettings: settings, setSetting: setContextSettings }}
       >
-        <Box
-          textAlign="center"
-          fontSize="xl"
-          background="transparent"
-          h="100vh"
+        <useColorSchemeContext.Provider
+          value={{
+            // IsLightMode,
+            color: colorScheme,
+            setColor: changeColorScheme,
+          }}
         >
-          {/* <NavBar /> */}
-          <NavBar
-            tags={tags}
-            saveTags={setTags}
-            // colorScheme={colorScheme}
-            // setColorScheme={changeColorScheme}
-          />
-          <ThumbAndTagContainer
-            posts={posts}
-            tags={tags}
-            // colorScheme={colorScheme}
-            // setColorScheme={changeColorScheme}
-          />
-          {/* <IconButton icon={<FaCog />} aria-label="Settings" pos="fixed" /> */}
-          {/* <SettingsWrapper tags={tags} saveTags={setTags.bind(this)} /> */}
-        </Box>
-      </useColorSchemeContext.Provider>
+          <Box
+            textAlign="center"
+            fontSize="xl"
+            background="transparent"
+            h="100vh"
+          >
+            {/* <NavBar /> */}
+            <NavBar
+              tags={tags}
+              saveTags={setTags}
+              // colorScheme={colorScheme}
+              // setColorScheme={changeColorScheme}
+            />
+            <ThumbAndTagContainer
+              posts={posts}
+              tags={tags}
+              // colorScheme={colorScheme}
+              // setColorScheme={changeColorScheme}
+            />
+            {/* <IconButton icon={<FaCog />} aria-label="Settings" pos="fixed" /> */}
+            {/* <SettingsWrapper tags={tags} saveTags={setTags.bind(this)} /> */}
+          </Box>
+        </useColorSchemeContext.Provider>
+      </useSettingsContext.Provider>
     </ChakraProvider>
   );
 };
