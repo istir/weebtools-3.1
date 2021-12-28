@@ -9,7 +9,7 @@ interface TagPickerProps {
   picked?: (Files & { tags: Tag[] })[];
   updatePost?: (
     posts: (Files & { tags: Tag[] })[] | (Files & { tags: Tag[] }),
-    tagIds: number[]
+    tags: Tag[]
   ) => void;
 }
 export default function TagPicker(props: TagPickerProps) {
@@ -20,6 +20,9 @@ export default function TagPicker(props: TagPickerProps) {
   function convertNumberToStringArray(arr: number[]): string[] {
     return arr.map(String);
   }
+
+  function saveTags() {}
+
   function findTagsFromId(tagIds: number[]) {
     // TODO: remake it without for loops
     const filteredTags = [];

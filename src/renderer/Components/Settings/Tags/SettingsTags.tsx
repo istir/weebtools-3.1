@@ -1,11 +1,12 @@
 import { ButtonGroup, Button } from '@chakra-ui/button';
 import { Grid } from '@chakra-ui/layout';
+import { Tag } from '@prisma/client';
 
 import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import useLightModeCheck from '../../../libs/hooks/useLightModeCheck';
 import useColorSchemeContext from '../../../libs/useColorSchemeContext';
-import { FromSite, Tag } from '../../../types';
+// import { FromSite, Tag } from '../../../types';
 import SettingsTag from './SettingsTag';
 // import SettingsTag from './SettingsTag';
 
@@ -18,7 +19,7 @@ interface SettingsTagsProps {
 export default function SettingsTags(props: SettingsTagsProps) {
   let shouldCancel = false;
   // const isChanged = false;
-
+  console.log(props.tags);
   const { color } = useContext(useColorSchemeContext);
   const helperTags: Tag[] = [];
   // eslint-disable-next-line array-callback-return

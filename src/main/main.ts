@@ -18,6 +18,8 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import loadFiles from './api/loadFiles';
 import loadTags from './api/loadTags';
+import getSetting from './api/getSetting';
+import loadImage from './api/loadImage';
 
 export default class AppUpdater {
   constructor() {
@@ -40,13 +42,21 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.on('loadFiles', async (e) => {
   await loadFiles().then((ful) => e.reply('loadFiles', ful));
-  // e.reply('loadFiles', files);
 });
 ipcMain.on('loadTags', async (e) => {
   await loadTags().then((ful) => e.reply('loadTags', ful));
-  // e.reply('loadFiles', files);
 });
-// console.log(loadFiles());
+ipcMain.on('setTags', async (e) => {
+  await loadTags().then((ful) => e.reply('loadTags', ful));
+});
+ipcMain.on('getSetting', async (e, key: string) => {
+  // console.log(e);
+  await getSetting(key).then((ful) => e.reply('getSetting', ful));
+  // await getSetting().then((ful) => e.reply('getSetting', ful));
+});
+ipcMain.on('loadImage', async (e) => {
+  // await loadImage().then((ful) => e.reply('loadImage', ful));
+});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
