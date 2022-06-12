@@ -16,16 +16,16 @@ model Tag {
   id       Int        @id @default(autoincrement())
   name     String
   folder   String
-  fromSite fromSite[]
+  fromSite String //since sqlite doesn't support string[], use a string and join with ','
   Files    Files[]
 }
 
-model fromSite {
-  id     Int    @id @default(autoincrement())
-  name   String
-  tagIds Int
-  Tag    Tag    @relation(fields: [tagIds], references: [id])
-}
+// model fromSite {
+//   id     Int    @id @default(autoincrement())
+//   name   String
+//   tagIds Int
+//   Tag    Tag    @relation(fields: [tagIds], references: [id])
+// }
 
 
 model Settings {

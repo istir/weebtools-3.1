@@ -6,10 +6,11 @@ import NavBar from './Components/NavBar';
 import ThumbAndTagContainer from './Components/ThumbAndTagContainer';
 import useIpcRenderer from './libs/hooks/useIpcRenderer';
 import useLoadFiles from './libs/hooks/useLoadFiles';
-import { Files, fromSite, Tag } from '.prisma/client';
+import { Files } from '.prisma/client';
 import useLoadTags from './libs/hooks/useLoadTags';
 import useGetSetting from './libs/hooks/useGetSetting';
 import useSettingsContext, { ValidSettings } from './libs/useSettingsContext';
+import { Tag } from './types';
 // import NavBar from './NavBar';
 // import colorSchemeContext from 'src/libs/ColorSchemeContext';
 // import ThumbAndTagContainer from "./ThumbAndTagContainer";
@@ -157,9 +158,14 @@ export const App: React.FC = () => {
   //   },
   // ]);
   const [posts, setPosts] = React.useState<(Files & { tags: Tag[] })[]>([]);
-  const [tags, setTags] = React.useState<(Tag & { fromSite: fromSite[] })[]>(
-    []
-  );
+  const [tags, setTags] = React.useState<Tag[]>([]);
+
+  React.useEffect(() => {
+    console.log('CHANGED TAGS', tags);
+    return () => {
+      // cleanup - ComponentWillUnmount
+    };
+  }, [tags]);
   const [settings, setSettings] = React.useState<ValidSettings>({
     mainPath: '',
   });
@@ -167,7 +173,16 @@ export const App: React.FC = () => {
   function hasKey<O>(obj: O, key: PropertyKey): key is keyof O {
     return key in obj;
   }
-
+  function saveTags(tags1: Tag[]) {
+    console.log('SAVE TAGS', tags1);
+    // //temp foreach
+    // tags.forEach((tag) => {
+    //   if (Array.isArray(tag.fromSite)) {
+    //     tag.fromSite.join(', ');
+    //   }
+    // });
+    setTags(tags1);
+  }
   const setContextSettings = (key: string, value: string) => {
     console.log(key);
     setSettings((prevSettings) => {
@@ -184,12 +199,14 @@ export const App: React.FC = () => {
   //   // tags = tagsToSave;
   // }
   React.useEffect(() => {
+    console.log('useEffect - 202');
     useLoadFiles(setPosts, 10);
     useLoadTags(setTags);
     useGetSetting('mainPath', setContextSettings);
   }, []);
-  console.log(settings);
-  console.log(posts);
+  console.log('settings', settings);
+  console.log('posts', posts);
+  console.log('tags', tags);
   return (
     <ChakraProvider theme={theme}>
       <useSettingsContext.Provider
@@ -211,7 +228,7 @@ export const App: React.FC = () => {
             {/* <NavBar /> */}
             <NavBar
               tags={tags}
-              saveTags={setTags}
+              saveTags={saveTags}
               // colorScheme={colorScheme}
               // setColorScheme={changeColorScheme}
             />

@@ -5,17 +5,17 @@ import {
   InputLeftAddon,
   InputRightAddon,
 } from '@chakra-ui/input';
-import { Grid, Text } from '@chakra-ui/layout';
+import { Box, Grid, Text } from '@chakra-ui/layout';
 import { Flex, IconButton } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
-import { fromSite, Tag } from '@prisma/client';
+// import { fromSite, Tag } from '@prisma/client';
 import useColorSchemeContext from '../../../libs/useColorSchemeContext';
 import useLightModeCheck from '../../../libs/hooks/useLightModeCheck';
-// import { FromSite, Tag } from '../../../types';
+import { Tag } from '../../../types';
 // import SettingsInput from "./SettingsInput";
 interface SettingsTagProps {
-  tag: Tag;
+  tag: Tag & { deleted?: boolean };
   removeTag: (id: number) => void;
   updateTag: (
     id: number,
@@ -26,7 +26,7 @@ interface SettingsTagProps {
     }: {
       name?: string;
       folder?: string;
-      fromSite?: fromSite[];
+      fromSite?: string[];
     }
   ) => void;
 }
@@ -52,13 +52,59 @@ export default function SettingsTags(props: SettingsTagProps) {
   // const [fromSite, setFromSite] = React.useState<
   //   { id: number; text: string }[]
   // >(props.tag.fromSite);
+  const initialFromSite = props.tag.fromSite?.map((val, index) => {
+    return { index, text: val, deleted: false };
+  });
+  const [fromSite, setFromSite] = React.useState<
+    {
+      index: number;
+      text: string;
+      deleted?: boolean;
+    }[]
+  >(initialFromSite || []);
+  // React.useEffect(() => {
+  //   // setFromSite(props.tag.fromSite);
+  //   setTag(props.tag);
+  //   // console.log(fromSite);
+  //   return () => {};
+  // }, [props.tag]);
+
+  function updateTag() {
+    if (fromSite) {
+      console.log('updateTag->fromSite', fromSite);
+      const fromSiteObjectWithoutDeleted = fromSite.filter(
+        (tag) => !tag.deleted
+      );
+      console.log(
+        'updateTag->fromSiteObjectWithoutDeleted',
+        fromSiteObjectWithoutDeleted
+      );
+      const fromSiteArray = fromSiteObjectWithoutDeleted.map((tag) => tag.text);
+      console.log('fromsitearray', fromSiteArray);
+      props.updateTag(tag.id, {
+        fromSite: fromSiteArray,
+        name: tag.name,
+        folder: tag.folder,
+      });
+      // props.updateTag(tag.id, { fromSite: fromSiteArray, tag.name, tag.folder });
+    } else {
+      props.updateTag(tag.id, { name: tag.name, folder: tag.folder });
+    }
+  }
 
   React.useEffect(() => {
-    // setFromSite(props.tag.fromSite);
-    setTag(props.tag);
-    // console.log(fromSite);
-    return () => {};
-  }, [props.tag]);
+    // effect - ComponentDidUpdate
+    return () => {
+      console.log('useEffect->fromSite', fromSite);
+      // cleanup - ComponentWillUnmount
+      // const fromSiteObjectWithoutDeleted = fromSite.filter(
+      //   (tag) => !tag.deleted
+      // );
+      // const fromSiteArray = fromSiteObjectWithoutDeleted.map((tag) => tag.text);
+      // props.updateTag(tag.id, { fromSite: fromSiteArray });
+      // updateTag();
+    };
+  }, []);
 
   // React.useEffect(() => {
   //   return () => {
@@ -68,18 +114,25 @@ export default function SettingsTags(props: SettingsTagProps) {
   //     });
   //   };
   // }, []);
+  function updateTagText(index: number, text: string) {
+    const helperArray = fromSite.slice(0);
+    helperArray[index].text = text;
+    setFromSite(helperArray);
+    console.log(index, text);
+  }
+  function removeFromSite(index: number) {
+    // const index = props.tag.fromSite
+    //   .map((prevPost) => prevPost.id)
+    //   .indexOf(fromSiteIndex);
 
-  function removeFromSite(fromSiteIndex: number) {
-    const index = props.tag.fromSite
-      .map((prevPost) => prevPost.id)
-      .indexOf(fromSiteIndex);
-    const helperArray = props.tag.fromSite.slice(0);
-    helperArray.splice(index, 1);
-    // helperArray.inse
-    props.updateTag(props.tag.id, { fromSite: helperArray });
+    const helperArray = fromSite.slice(0);
+    // helperArray.splice(index, 1);
+    helperArray[index].deleted = true;
+    setFromSite(helperArray);
+    // props.updateTag(props.tag.id, { fromSite: helperArray });
     // return { fromSite: helperArray };
   }
-
+  if (props.tag.deleted) return null;
   return (
     <Grid
       bg={`${color}.${lightMode ? 100 : 900}`}
@@ -90,16 +143,21 @@ export default function SettingsTags(props: SettingsTagProps) {
       p="2"
       gridTemplateRows="min-content min-content min-content min-content"
       onBlur={() => {
+        // console.log('BLUUUR');
+        updateTag();
         // console.log(props.tag.id);
         // props.tag.fromSite
-        props.updateTag(props.tag.id, {
-          // tag.fromSite,
-          folder: tag.folder,
-          name: tag.name,
-          fromSite: tag.fromSite,
-        });
+        // props.updateTag(props.tag.id, {
+        //   // tag.fromSite,
+        //   folder: tag.folder,
+        //   name: tag.name,
+        //   fromSite: tag.fromSite,
+        // });
+        // updateTag(tag.id, { fromSite,folder });
       }}
     >
+      <Box>{props.tag.id}</Box>
+      <Box>{props.tag.name}</Box>
       <Grid
         ml="40px"
         templateColumns="1fr min-content"
@@ -246,106 +304,111 @@ export default function SettingsTags(props: SettingsTagProps) {
           From Site
         </Text>
         <Flex flexDirection="column">
-          {tag.fromSite.map((tag) => (
-            <Flex key={tag.id} mt="2" mx="2">
-              <InputGroup
-                size="md"
-                transitionDuration="normal"
-                borderRadius="md"
-                // border="2px solid #"
-                overflow="hidden"
-                // border={`2px solid var(--chakra-colors-${color}-${
-                //   lightMode ? '200' : '700'
-                // })`}
-                boxShadow={`0 0 0 2px var(--chakra-colors-${color}-${
-                  lightMode ? '200' : '800'
-                })`}
-                _focusWithin={{
-                  // border: `2px solid transparent`,
-                  boxShadow: `0 0 0 3px var(--chakra-colors-${color}-${
-                    lightMode ? '700' : '200'
-                  })`,
-                }}
-              >
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  variant="noBorders"
-                  value={tag.text}
-                  // id={tag.id.toString()}
+          {fromSite.map(
+            (tag) =>
+              tag.deleted || (
+                <Flex key={tag.index} mt="2" mx="2">
+                  <InputGroup
+                    size="md"
+                    transitionDuration="normal"
+                    borderRadius="md"
+                    // border="2px solid #"
+                    overflow="hidden"
+                    // border={`2px solid var(--chakra-colors-${color}-${
+                    //   lightMode ? '200' : '700'
+                    // })`}
+                    boxShadow={`0 0 0 2px var(--chakra-colors-${color}-${
+                      lightMode ? '200' : '800'
+                    })`}
+                    _focusWithin={{
+                      // border: `2px solid transparent`,
+                      boxShadow: `0 0 0 3px var(--chakra-colors-${color}-${
+                        lightMode ? '700' : '200'
+                      })`,
+                    }}
+                  >
+                    <Input
+                      type="text"
+                      placeholder="Name"
+                      variant="noBorders"
+                      value={tag.text}
+                      // id={tag.id.toString()}
 
-                  bg="whiteAlpha.400"
-                  borderRadius="0"
-                  // onBlur={(e) => {
-                  //   console.log(props.tag.id);
-                  //   props.updateTag(props.tag.id, {
-                  //     fromSite,
-                  //   });
-                  // }}
-                  onChange={(e) => {
-                    // console.log(e.target.id);
-                    // const { fromSite } = props.tag;
-                    // // const index = fromSite
-                    // //   .map((prevFromSite) => prevFromSite.id)
-                    // //   .indexOf(tag.id);
-                    // // fromSite[index] = { id: tag.id, text: e.target.value };
-                    // // props.updateTag(props.tag.id, {
-                    // //   fromSite,
-                    // // });
-                    // fromSite[tag.id] = { id: tag.id, text: e.target.value };
-                    // props.updateTag(props.tag.id, {
-                    //   fromSite,
-                    // });
-                    setTag((prevTag) => {
-                      const helperArray = prevTag.fromSite.slice(0);
-                      helperArray[tag.id] = {
-                        id: tag.id,
-                        text: e.target.value,
-                      };
-                      return { ...prevTag, fromSite: helperArray };
-                    });
-                    // console.log(tag.id, index);
-                  }}
-                  pr="4.5rem"
-                />
-
-                <InputRightAddon
-                  padding="0"
-                  // width="4.5rem"
-                  border="transparent"
-                  // borderLeftWidth="0"
-                  borderRadius="0"
-                  // overflow="hidden"
-                  bg={`var(--chakra-colors-${color}-${
-                    lightMode ? '700' : '200'
-                  })`}
-                  children={
-                    <IconButton
-                      aria-label="Remove tag"
-                      // h="1.75rem"
-                      // size="sm"
-                      // mx="2"
-                      colorScheme={color}
-                      icon={<FaMinus />}
-                      w="100%"
+                      bg="whiteAlpha.400"
                       borderRadius="0"
-                      // border={`2px solid var(--chakra-colors-${color}-${
-                      //   lightMode ? '700' : '200'
-                      // })`}
-                      // borderLeftRadius="0"
-                      // borderColor={`${color}.${lightMode ? '200' : '700'}`}
-                      // borderWidth="2px"
-                      // borderStyle="solid"
-                      // borderLeftWidth="0"
-                      onClick={() => {
-                        removeFromSite(tag.id);
+                      // onBlur={(e) => {
+                      //   console.log(props.tag.id);
+                      //   props.updateTag(props.tag.id, {
+                      //     fromSite,
+                      //   });
+                      // }}
+                      onChange={(e) => {
+                        updateTagText(tag.index, e.target.value);
+                        // console.log(e.target.id);
+
+                        // const { fromSite } = props.tag;
+                        // // const index = fromSite
+                        // //   .map((prevFromSite) => prevFromSite.id)
+                        // //   .indexOf(tag.id);
+                        // // fromSite[index] = { id: tag.id, text: e.target.value };
+                        // // props.updateTag(props.tag.id, {
+                        // //   fromSite,
+                        // // });
+                        // fromSite[tag.id] = { id: tag.id, text: e.target.value };
+                        // props.updateTag(props.tag.id, {
+                        //   fromSite,
+                        // });
+                        // setTag((prevTag) => {
+                        //   const helperArray = prevTag.fromSite.slice(0);
+                        //   helperArray[tag.id] = {
+                        //     id: tag.id,
+                        //     text: e.target.value,
+                        //   };
+                        //   return { ...prevTag, fromSite: helperArray };
+                        // });
+                        // console.log(tag.id, index);
                       }}
+                      pr="4.5rem"
                     />
-                  }
-                />
-              </InputGroup>
-            </Flex>
-          ))}
+
+                    <InputRightAddon
+                      padding="0"
+                      // width="4.5rem"
+                      border="transparent"
+                      // borderLeftWidth="0"
+                      borderRadius="0"
+                      // overflow="hidden"
+                      bg={`var(--chakra-colors-${color}-${
+                        lightMode ? '700' : '200'
+                      })`}
+                      children={
+                        <IconButton
+                          aria-label="Remove tag"
+                          // h="1.75rem"
+                          // size="sm"
+                          // mx="2"
+                          colorScheme={color}
+                          icon={<FaMinus />}
+                          w="100%"
+                          borderRadius="0"
+                          // border={`2px solid var(--chakra-colors-${color}-${
+                          //   lightMode ? '700' : '200'
+                          // })`}
+                          // borderLeftRadius="0"
+                          // borderColor={`${color}.${lightMode ? '200' : '700'}`}
+                          // borderWidth="2px"
+                          // borderStyle="solid"
+                          // borderLeftWidth="0"
+                          onClick={() => {
+                            removeFromSite(tag.index);
+                          }}
+                        />
+                      }
+                    />
+                  </InputGroup>
+                </Flex>
+              )
+          )}
         </Flex>
         <IconButton
           aria-label="Add empty tag"
@@ -357,22 +420,26 @@ export default function SettingsTags(props: SettingsTagProps) {
           onClick={() => {
             // this.setState((prevState) => {
             // prevTags[prevTags.length - 1].id + 1,
-            const helperArray = props.tag.fromSite
-              ? props.tag.fromSite.slice(0)
-              : [];
+            const helperArray = fromSite ? fromSite.slice(0) : [];
+            // console.log('helper array', helperArray);
             if (
               (helperArray[helperArray.length - 1] &&
-                helperArray[helperArray.length - 1].text !== '') ||
+                helperArray[helperArray.length - 1]?.deleted) ||
+              helperArray[helperArray.length - 1]?.text !== '' ||
               !helperArray[helperArray.length - 1]
             ) {
+              // const id = helperArray.length
               helperArray.push({
-                id: helperArray[helperArray.length - 1]?.id + 1,
+                index: helperArray.length,
                 text: '',
+                deleted: false,
               });
+              console.log('OnClick->helper array', helperArray);
               // return { fromSite: helperArray };
-              props.updateTag(props.tag.id, {
-                fromSite: helperArray,
-              });
+              // props.updateTag(props.tag.id, {
+              //   fromSite: helperArray,
+              // });
+              setFromSite(helperArray);
             }
             // return { fromSite: prevState.fromSite };
             // props.updateTag(props.tag.id, { fromSite: e.target.value });
@@ -395,9 +462,10 @@ export default function SettingsTags(props: SettingsTagProps) {
 // import { Flex, IconButton } from '@chakra-ui/react';
 // import React, { useContext } from 'react';
 // import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
+// import { fromSite, Tag } from '@prisma/client';
 // import useColorSchemeContext from '../../../libs/useColorSchemeContext';
 // import useLightModeCheck from '../../../libs/hooks/useLightModeCheck';
-// import { FromSite, Tag } from '../../../types';
+// // import { FromSite, Tag } from '../../../types';
 // // import SettingsInput from "./SettingsInput";
 // interface SettingsTagProps {
 //   tag: Tag;
@@ -411,7 +479,7 @@ export default function SettingsTags(props: SettingsTagProps) {
 //     }: {
 //       name?: string;
 //       folder?: string;
-//       fromSite?: FromSite;
+//       fromSite?: string[];
 //     }
 //   ) => void;
 // }
@@ -631,8 +699,8 @@ export default function SettingsTags(props: SettingsTagProps) {
 //           From Site
 //         </Text>
 //         <Flex flexDirection="column">
-//           {tag.fromSite.map((tag) => (
-//             <Flex key={tag.id} mt="2" mx="2">
+//           {tag.fromSite.split(',').map((tag) => (
+//             <Flex key={tag} mt="2" mx="2">
 //               <InputGroup
 //                 size="md"
 //                 transitionDuration="normal"
@@ -656,7 +724,7 @@ export default function SettingsTags(props: SettingsTagProps) {
 //                   type="text"
 //                   placeholder="Name"
 //                   variant="noBorders"
-//                   value={tag.text}
+//                   value={tag}
 //                   // id={tag.id.toString()}
 
 //                   bg="whiteAlpha.400"
@@ -681,14 +749,14 @@ export default function SettingsTags(props: SettingsTagProps) {
 //                     // props.updateTag(props.tag.id, {
 //                     //   fromSite,
 //                     // });
-//                     setTag((prevTag) => {
-//                       const helperArray = prevTag.fromSite.slice(0);
-//                       helperArray[tag.id] = {
-//                         id: tag.id,
-//                         text: e.target.value,
-//                       };
-//                       return { ...prevTag, fromSite: helperArray };
-//                     });
+//                     // setTag((prevTag) => {
+//                     //   const helperArray = prevTag.fromSite.slice(0);
+//                     //   helperArray[tag.id] = {
+//                     //     id: tag.id,
+//                     //     text: e.target.value,
+//                     //   };
+//                     //   return { ...prevTag, fromSite: helperArray };
+//                     // });
 //                     // console.log(tag.id, index);
 //                   }}
 //                   pr="4.5rem"

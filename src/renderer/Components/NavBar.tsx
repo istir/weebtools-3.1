@@ -31,7 +31,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   // colorScheme,
   // setColorScheme,
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   // colorSchemeContext
   const { color } = useContext(useColorSchemeContext);
   return (
@@ -67,19 +67,7 @@ export const NavBar: React.FC<NavBarProps> = ({
         //   height="12"
         padding="2"
       >
-        <IconButton
-          bg="transparent"
-          color={useLightModeCheck() ? `black` : `white`}
-          _hover={{
-            background: `${
-              useLightModeCheck() ? `${color}.300` : `${color}.700`
-            }`,
-          }}
-          colorScheme={color}
-          icon={<FaCog />}
-          aria-label="Settings"
-          onClick={onOpen}
-        />
+        <SettingsWrapper tags={tags} saveTags={saveTags} />
         <ColorModeSwitcher
           _hover={{
             background: `${
@@ -90,7 +78,7 @@ export const NavBar: React.FC<NavBarProps> = ({
           justifySelf="flex-end"
         />
       </Flex>
-      <Modal isOpen={isOpen} onClose={onClose} size="full">
+      {/* <Modal isOpen={isOpen} onClose={onClose} size="full">
         <ModalOverlay />
         <ModalContent borderRadius="none">
           <ModalCloseButton />
@@ -104,7 +92,7 @@ export const NavBar: React.FC<NavBarProps> = ({
             />
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

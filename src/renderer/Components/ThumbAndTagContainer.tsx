@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
+import { Tag } from 'renderer/types';
 import ThumbnailContainer from './ThumbDisplay/ThumbnailContainer';
 import TagPicker from './TagPicker/TagPicker';
 // import { Post, Tag } from '../types';
-import { Files, fromSite, Tag } from '.prisma/client';
+import { Files } from '.prisma/client';
 
 interface ThumbAndTagContainerProps {
   posts?: (Files & { tags: Tag[] })[];
-  tags: (Tag & { fromSite: fromSite[] })[];
+  tags: Tag[];
   // colorScheme: string;
   // setColorScheme: (colorScheme: string) => void;
 }
@@ -26,7 +27,7 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     shiftKey?: boolean
   ) {
     // console.log(ctrlKey);
-    console.log(post.id);
+    console.log(post);
     if (ctrlKey) {
       setPicked((prevPicked) => {
         const helperArray = prevPicked.slice(0);

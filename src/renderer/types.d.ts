@@ -15,3 +15,16 @@
 //   folder: string;
 //   fromSite: FromSite;
 // }
+
+export interface Tag {
+  id: number;
+  name: string;
+  folder: string;
+  fromSite: string[];
+}
+// Tag = {
+//   id: number;
+//   name: string;
+//   folder: string;
+//   fromSite: string;
+// }
