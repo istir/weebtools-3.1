@@ -24,6 +24,9 @@ contextBridge.exposeInMainWorld('electron', {
     async loadImage() {
       return ipcRenderer.send('loadImage');
     },
+    async setPost(post) {
+      return ipcRenderer.send('setPost', post);
+    },
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
     },

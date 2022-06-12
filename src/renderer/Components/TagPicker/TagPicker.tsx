@@ -1,6 +1,9 @@
 import { CheckboxGroup } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
-import { Files, Tag } from '.prisma/client';
+import { Tag } from 'renderer/types';
+import filterTags from 'renderer/libs/filterTags';
+import { Files } from '.prisma/client';
+
 import useColorSchemeContext from '../../libs/useColorSchemeContext';
 import TagPickerFunctionWrapper from './TagPickerFunctionWrapper';
 
@@ -25,6 +28,7 @@ export default function TagPicker(props: TagPickerProps) {
 
   function findTagsFromId(tagIds: number[]) {
     // TODO: remake it without for loops
+
     const filteredTags = [];
     for (let i = 0; i < props.tags.length; i += 1) {
       for (let j = 0; j < tagIds.length; j += 1) {
@@ -38,8 +42,16 @@ export default function TagPicker(props: TagPickerProps) {
   useEffect(() => {
     if (!props.picked) return;
     if (workType === 'single') {
+      console.log(
+        convertNumberToStringArray(
+          filterTags(props.tags, props.picked[0].fromSite).map((val) => val.id)
+        )
+        // convertNumberToStringArray(props.picked[0].tags.map((val) => val.id))
+      );
       setChecked(
-        convertNumberToStringArray(props.picked[0].tags.map((val) => val.id))
+        convertNumberToStringArray(
+          filterTags(props.tags, props.picked[0].fromSite).map((val) => val.id)
+        )
       );
     } else {
       // TODO: somehow make it so that if every post contains the same tag then show it and let the user toggle it on every post

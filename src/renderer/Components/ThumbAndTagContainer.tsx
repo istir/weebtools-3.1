@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
 import { Tag } from 'renderer/types';
+import filterTags from 'renderer/libs/filterTags';
 import ThumbnailContainer from './ThumbDisplay/ThumbnailContainer';
 import TagPicker from './TagPicker/TagPicker';
 // import { Post, Tag } from '../types';
@@ -27,7 +28,8 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     shiftKey?: boolean
   ) {
     // console.log(ctrlKey);
-    console.log(post);
+    // console.log(post);
+
     if (ctrlKey) {
       setPicked((prevPicked) => {
         const helperArray = prevPicked.slice(0);
@@ -99,6 +101,7 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
       helperArray.forEach((post) => {
         if (idsToUpdate.includes(post.id)) {
           const postToUpdate = tags ? { ...post, tags } : post;
+          console.log('postToUpdate', postToUpdate);
           helperArray.splice(post.id, 1, postToUpdate) &&
             onThumbnailClick(post, false, false);
         }
@@ -112,7 +115,12 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
       const index = prevPost.map((prevIndex) => prevIndex.id).indexOf(post.id);
       const helperArray = prevPost.slice(0);
       // const allTags =props.tags.map(val=>val.id)
-      helperArray.splice(index, 1, { ...post, tags });
+      // helperArray.splice(index,1,)
+      // const f = post.fromSite.split(", ")
+      const t = tags.map((val) => val.fromSite[0]);
+      post.fromSite = t.join(', ');
+      // helperArray.splice(index, 1, { ...post, tags });
+      helperArray.splice(index, 1, post);
       return helperArray;
     });
     // onThumbnailClick({ ...post });
@@ -123,7 +131,7 @@ export default function ThumbAndTagContainer(props: ThumbAndTagContainerProps) {
     posts: (Files & { tags: Tag[] })[] | (Files & { tags: Tag[] }),
     tags: Tag[]
   ) {
-    console.log('update');
+    console.log('update', posts, tags);
     if (Array.isArray(posts)) {
       updatePostsArray(posts, tags);
       return;

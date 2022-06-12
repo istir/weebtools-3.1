@@ -9,6 +9,7 @@ import useLoadFiles from './libs/hooks/useLoadFiles';
 import { Files } from '.prisma/client';
 import useLoadTags from './libs/hooks/useLoadTags';
 import useGetSetting from './libs/hooks/useGetSetting';
+import useSetPost from './libs/hooks/useSetPost';
 import useSettingsContext, { ValidSettings } from './libs/useSettingsContext';
 import { Tag } from './types';
 // import NavBar from './NavBar';
@@ -207,6 +208,13 @@ export const App: React.FC = () => {
   console.log('settings', settings);
   console.log('posts', posts);
   console.log('tags', tags);
+  // if (posts[0]) {
+  //   if (posts[0].Timestamp) {
+  //     console.log('Y');
+  //     posts[0].fileName = Date.now().toString();
+  //   }
+  // }
+  // useSetPost(posts[0]);
   return (
     <ChakraProvider theme={theme}>
       <useSettingsContext.Provider

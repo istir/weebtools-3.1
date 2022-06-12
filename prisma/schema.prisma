@@ -10,6 +10,7 @@ model Files {
   url       String
   Timestamp BigInt
   tags       Tag[]
+  fromSite String @default("")//since sqlite doesn't support string[], use a string and join with ','
 }
 
 model Tag {

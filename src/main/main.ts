@@ -20,6 +20,7 @@ import loadFiles from './api/loadFiles';
 import loadTags from './api/loadTags';
 import getSetting from './api/getSetting';
 import loadImage from './api/loadImage';
+import setPost from './api/setPost';
 
 export default class AppUpdater {
   constructor() {
@@ -38,6 +39,11 @@ ipcMain.on('ipc-example', async (event, arg) => {
   // event.reply('ipc-example', files[0].fileName);
 
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('setPost', async (e) => {
+  console.log('main->setPost', e);
+  // await setPost().then((ful) => e.reply('setPost', ful));
 });
 
 ipcMain.on('loadFiles', async (e) => {

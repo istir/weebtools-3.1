@@ -2,6 +2,7 @@ import { Image } from '@chakra-ui/image';
 import { Box, Grid, Text } from '@chakra-ui/layout';
 import { Files, Tag, fromSite } from '@prisma/client';
 import React, { useContext, useState } from 'react';
+import filterTagsAsStringArray from 'renderer/libs/filterTagsAsStringArray';
 import useLightModeCheck from '../../libs/hooks/useLightModeCheck';
 import useColorSchemeContext from '../../libs/useColorSchemeContext';
 import ThumbnailTagDisplay from './ThumbnailTagDisplay';
@@ -127,12 +128,22 @@ export default function Thumbnail(props: ThumbnailProps) {
           {props.post?.fileName ? props.post.fileName : 'Post Name'}
         </Text>
       </Box>
-      <ThumbnailTagDisplay
+      {/* <ThumbnailTagDisplay
         tags={props.tags}
         tagsCurrentPost={props.post.tags}
         // tagsIdsCurrentPost={props.post?.tagIds}
         color={lightMode ? 'blackAlpha.800' : 'whiteAlpha.800'}
-      />
+      /> */}
+
+      <Text
+        fontSize="sm"
+        fontWeight="semibold"
+        opacity={props.tags.length > 0 ? '1' : '0'}
+        //  i smoked something with opacity i think i dont know what it does
+        color={lightMode ? 'blackAlpha.800' : 'whiteAlpha.800'}
+      >
+        {filterTagsAsStringArray(props.tags, props.post.fromSite).join(', ')}
+      </Text>
       <Text
         fontSize="sm"
         fontWeight="semibold"
